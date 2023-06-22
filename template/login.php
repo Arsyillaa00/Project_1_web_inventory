@@ -1,4 +1,4 @@
-<form name="login" method="POST" action="">
+<form name="login" method="POST" action="login.php">
 
 
     <label for="email">Email:</label> <!-- saat nama label diklik langsung fokus ke lokasi input email -->

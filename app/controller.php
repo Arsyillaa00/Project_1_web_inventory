@@ -100,4 +100,15 @@ function check_tabel_user($mysql){
         }
     }
 }
+
+//===== membuat fungsi untuk login ===== 
+function login($mysql, $email, $password){
+    //perintah SQL Injection
+    $inputEmail = $mysql->real_escape_string($email); 
+    $inputPassword = $mysql->real_escape_string($password); 
+
+    $query = "SELECT * FROM user WHERE email='$inputEmail' AND password='$inputPassword'";
+
+    return $mysql->query($query)->fatch_assoc();
+}
 ?>

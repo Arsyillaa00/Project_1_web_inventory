@@ -45,3 +45,4 @@ require_once "app/controller.php";
 check_tabel_user($mysql)
 ```
 hasil result jika tabel user sudah ada = 1. Namun apabila tabel user belum ada, maka fungsi akan otomatis create tabel user dan membuat akun demo (jika berhasil nilainya 1, apabila gagal nilainya 0)
+
