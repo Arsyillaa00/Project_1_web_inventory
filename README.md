@@ -1,6 +1,12 @@
 ### v.1.000.002
 -----
 
+fitur yang ditambah:
+- koneksi database
+- create tabel
+- login
+- logout
+
 ##### KONEKSI MYSQL
 fungsi untuk check connect ke mysqli atau tidak
 ```php

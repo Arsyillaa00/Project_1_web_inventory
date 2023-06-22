@@ -3,10 +3,10 @@
 // Mulai session
 session_start();
 
-// Hapus session dengan nama 'username'
+// Hapus session dengan nama 'username' (biasa di pakai pada kasus update)
 //unset($_SESSION['username']);
 
-// Hapus semua session
+// Hapus semua session (masih meninggalkan bekas sampah di cookie)
 //session_unset();
 
 // Hapus session dan hapus cookie yang terkait
