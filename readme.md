@@ -5,8 +5,6 @@
 melakukan koneksi ke mysql
 
 ```php
-
 require_once "app/controller.php";
 connection();
-
 ```
