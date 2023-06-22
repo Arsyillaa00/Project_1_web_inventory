@@ -8,7 +8,7 @@
     print "page dashboard";
 
     //panggil function mysql 
-    $db = mysql();
+    $db = database();
 
     if($db){
         $user = check_tabel_user($db);
@@ -19,7 +19,6 @@
             include "../template/login.php";
         }
     }
-
     
     
     

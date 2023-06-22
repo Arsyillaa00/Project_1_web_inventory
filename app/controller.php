@@ -47,17 +47,11 @@ function create_database($mysql, $db){
 }
 
 //===== fungsi untuk check koneksi mysql ke database ===== 
-$servername = "localhost";
-$username = "root";
-$password = "";
 
-function mysql(){
-    global $servername;
-    global $username;
-    global $password;
+function database(){
     
     // Buat koneksi
-    $conn = new mysqli($servername, $username, $password, "project_2");
+    $conn = new mysqli("localhost", "root", "", "project_2");
 
     // Periksa koneksi
     if ($conn->connect_error) {

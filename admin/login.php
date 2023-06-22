@@ -8,11 +8,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $password = $_POST["password"];
 
     //koneksi fungsi mysql
-    $db = mysql();
+    $db = database();
 
     if($db){
 
-        print json_encode(login($db));
+        print json_encode(login($db, $email, $password));
 
     }
 }
