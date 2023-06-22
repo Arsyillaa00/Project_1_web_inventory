@@ -46,3 +46,13 @@ check_tabel_user($mysql)
 ```
 hasil result jika tabel user sudah ada = 1. Namun apabila tabel user belum ada, maka fungsi akan otomatis create tabel user dan membuat akun demo (jika berhasil nilainya 1, apabila gagal nilainya 0)
 
+##### MEMBUAT LOGIN
+fungsi untuk melakukan login dashboard
+- $mysql adalah nama koneksi sql ke database
+- $email adalah nama attribut untuk email
+- $password adalah nama attribut untuk password
+```php
+require_once "../app/controller.php";
+login($mysql, $email, $password)
+```
+hasil result jika berhasil login, maka data user akan menjadi session. Namun apabila gagal, maka form login akan di tampilkan lagi

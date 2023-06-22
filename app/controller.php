@@ -103,6 +103,6 @@ function login($mysql, $email, $password){
 
     $query = "SELECT * FROM user WHERE email='$inputEmail' AND password='$inputPassword'";
 
-    return $mysql->query($query)->fatch_assoc();
+    return $mysql->query($query)->fetch_assoc();
 }
 ?>

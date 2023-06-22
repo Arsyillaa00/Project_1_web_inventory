@@ -1,28 +1,34 @@
 <?php
     //nyambungin file dashboard.php ke file controller.php
-    require_once "../app/controller.php"; 
+    require_once "../app/controller.php";
+    
+    //koneksi ke router php
+    require_once "../app/router.php"; 
+
 
     //nyambungin file dashboard.php ke file login.php
     //include "../template/login.php";
 
-    print "page dashboard";
+    session_start();
 
-    //panggil function mysql 
-    $db = database();
+    if(isset($_SESSION['id_user'])){
+        login_status($_SESSION);
+    
+    }else{
+        print "page dashboard";
 
-    if($db){
-        $user = check_tabel_user($db);
+        //panggil function mysql 
+        $db = database();
 
-        if($user){
-            
-            //nyambungin file dashboard.php ke file login.php
-            include "../template/login.php";
+        if($db){
+            $user = check_tabel_user($db);
+
+            if($user){
+                
+                //nyambungin file dashboard.php ke file login.php
+                include "../template/login.php";
+            }
         }
     }
-    
-    
-    
-
-
 
 ?>

@@ -11,10 +11,23 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $db = database();
 
     if($db){
-
         print json_encode(login($db, $email, $password));
 
+        $login = login($db, $email, $password);
+
+        if(!empty($login)){
+            session_start();
+            foreach($login AS $key => $value){
+                $_SESSION[$key] = $value;
+            }
+
+            //perintah untuk redirect
+            header("Location: dashboard.php");
+        }
     }
+
+    
+    
 }
 
 ?>
