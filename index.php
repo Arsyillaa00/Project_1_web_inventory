@@ -1,3 +1,17 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Project 2 - Inventory</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    </head>
+    <body>
+    </body>
+</html>
+
+
+
 <?php
 
 //sambungin file index.php ke file controller.php
@@ -12,7 +26,7 @@ require_once "app/router.php";
 $connection = connection();
 if($connection){
     
-    $db = check_database($connection, "project_2" /*nama db yg di cari*/);
+$db = check_database($connection, "project_2" /*nama db yg di cari*/);
 
     if($db){
         return dashboard();
@@ -27,7 +41,6 @@ if($connection){
     }
 }
 
-
 /*
 //memanggil fungsi db di file "controller.php"
 $db = db();
@@ -36,3 +49,5 @@ if($db){
 }
 */
 ?>
+
+

@@ -1,3 +1,21 @@
+### v.1.000.003
+-----
+
+fitur yang ditambah:
+- style bootstrap 5.3
+- layout intro, home, dan login
+
+##### CARA PEMANGGILAN LAYOUT
+fungsi untuk memanggil layout
+```php
+require_once "app/router.php";
+```
+lokasi layout berada di folder template
+
+```php
+include "template/{nama_file}.php";
+```
+
 ### v.1.000.002
 -----
 
