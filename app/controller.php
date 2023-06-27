@@ -63,13 +63,13 @@ function database(){
 
 //===== fungsi untuk check tabel user ada isinya atau tidak ===== 
 function check_tabel_user($mysql){
-    $query = "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'project_2'";
-    $result = $mysql->query($query);
-
+    //perintah utk check tabel
+    $query = "SHOW TABLES LIKE 'user'";
+    $result = $mysql->query($query)->num_rows;
     //check $result berhasil/tdk
-    //print json_encode($result->fetch_all());
+    //print json_encode($result);
 
-    if(!empty($result->fetch_row())){
+    if($result){
         return 1;
         
     }else{
@@ -104,5 +104,100 @@ function login($mysql, $email, $password){
     $query = "SELECT * FROM user WHERE email='$inputEmail' AND password='$inputPassword'";
 
     return $mysql->query($query)->fetch_assoc();
+}
+
+//===== fungsi untuk check tabel status ada isinya atau tidak ===== 
+function check_tabel_status($mysql){
+    //perintah utk check tabel
+    $query = "SHOW TABLES LIKE 'status'";
+    $result = $mysql->query($query)->num_rows;
+    //check $result berhasil/tdk
+    //print json_encode($result);
+
+    if($result){
+        return 1;
+        
+    }else{
+        $create = "CREATE TABLE status (
+            id_status INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(60) NOT NULL,
+            level INT(6) NOT NULL
+            )";
+
+        //perintah untuk membuat tabel di database
+        if($mysql->query($create) != false){
+            $demo = "INSERT INTO status (title,level) VALUES ('admin','1')";
+
+            //perintah untuk check insert status telah berhsl/tdk
+            if($mysql->query($demo) != false){
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+    }
+}
+
+//===== fungsi untuk check tabel products ada isinya atau tidak ===== 
+function check_tabel_products($mysql){
+    //perintah utk check tabel
+    $query = "SHOW TABLES LIKE 'products'";
+    $result = $mysql->query($query)->num_rows;
+    //check $result berhasil/tdk
+    //print json_encode($result);
+
+    if($result){
+        return 1;
+        
+    }else{
+        $create = "CREATE TABLE products (
+            id_products INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            nama_products VARCHAR(60) NOT NULL,
+            harga INT(25) NOT NULL,
+            total INT(12) NOT NULL,
+            status INT(6) NOT NULL,
+            date_c INT(20) NOT NULL,
+            date_m INT(20) NOT NULL
+            )";
+
+        //perintah untuk membuat tabel di database
+        if($mysql->query($create) != false){
+            $time = time();
+            $demo = "INSERT INTO products (nama_products,harga,total,status,date_c,date_m) VALUES ('Goodtime','12000','24','1','$time','$time')";
+
+            //perintah untuk check insert status telah berhsl/tdk
+            if($mysql->query($demo) != false){
+                return 1;
+            }else{
+                return 0;
+            }
+        }
+    }
+}
+
+//fungsi utk check total data user yg ada di tabel
+function check_count_user($mysql){
+    $query = "SELECT * FROM user";
+    $result = $mysql->query($query)->num_rows;
+
+    return "total tabel user: ".$result;
+
+}
+
+//fungsi utk check total data status yg ada di tabel
+function check_count_status($mysql){
+    $query = "SELECT * FROM status";
+    $result = $mysql->query($query)->num_rows;
+
+    return "total tabel status: ".$result;
+}
+
+//fungsi utk check total data products yg ada di tabel
+function check_count_products($mysql){
+    $query = "SELECT COUNT(*), date_m FROM products ORDER BY date_m DESC LIMIT 1"; /*ASC = urutan dr kecil ke besar, DESC = urutan dr besar ke kecil */
+    $result = $mysql->query($query)->fetch_row();
+    $time = date("d-m-Y",$result[1]);
+
+    return "total tabel products: ".$result[0]." terakhir update ".$time;
 }
 ?>

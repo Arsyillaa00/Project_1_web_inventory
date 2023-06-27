@@ -15,19 +15,9 @@ function no_database(){
 }
 
 // function login
-function login_status($profil){
-    print $profil['id_user'];
-    print "<br>";
-    print $profil['nama'];
-    print "<br>";
-    print $profil['email'];
-    print "<br>";
-    print $profil['password'];
-    print "<br>";
-    print $profil['status'];
-
-    print "<br>";
-    print "<a href='logout.php'> logout </a>";
+function login_status(){
+    
+    include "../template/sidebar.php";
 }
 
 ?>

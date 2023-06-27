@@ -12,6 +12,8 @@
 
 
 <?php
+
+
     //nyambungin file dashboard.php ke file controller.php
     require_once "../app/controller.php";
     
@@ -22,17 +24,46 @@
     //nyambungin file dashboard.php ke file login.php
     //include "../template/login.php";
 
+    //panggil function mysql 
+    $db = database();
     session_start();
 
+    //mengecheck session user
     if(isset($_SESSION['id_user'])){
+        //jika session tersimpan, perintah dibawah akan dijalankan
         login_status($_SESSION);
-    
-    }else{
-        //print "page dashboard";
+        
+        //check tabel user ada/tdk
+        $user = check_tabel_user($db);
+        if($user){
+            //print "TABLE USER EXIST";
+            print check_count_user($db);
+        }else{
+            print "TABLE USER NO EXIST";
+        }
 
-        //panggil function mysql 
-        $db = database();
+        print "<br>";
+        //check tabel status ada/tdk
+        $status = check_tabel_status($db);
+        if($status){
+            //print "TABLE STATUS EXIST";
+            print check_count_status($db);
+        }else{
+            print "TABLE STATUS NO EXIST";
+        }
 
+        print "<br>";
+        //check tabel products ada/tdk
+        $products = check_tabel_products($db);
+        if($products){
+            //print "TABLE PRODUCTS EXIST";
+            print check_count_products($db);
+        }else{
+            print "TABLE PRODUCTS NO EXIST";
+        }
+
+    }else{ 
+        //jika session masih null/kosong, maka akan mengecek tabel user dan menampilkan form login
         if($db){
             $user = check_tabel_user($db);
 
@@ -43,5 +74,7 @@
             }
         }
     }
+
+
 
 ?>
