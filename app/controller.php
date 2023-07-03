@@ -180,7 +180,7 @@ function check_count_user($mysql){
     $query = "SELECT * FROM user";
     $result = $mysql->query($query)->num_rows;
 
-    return "total tabel user: ".$result;
+    return $result;
 
 }
 
@@ -200,4 +200,15 @@ function check_count_products($mysql){
 
     return "total tabel products: ".$result[0]." terakhir update ".$time;
 }
+
+//fungsi untuk mengambil data di MYSQL, kemudian akan ditampilkan di file user.php
+function tabel_user($mysql, $page){
+    $limit = 4*$page;
+    $query = "SELECT (@no:=@no+1) AS nomor, email, nama FROM user, (SELECT @no:=$limit) AS number ORDER BY id_user LIMIT $limit,4";
+    $result = $mysql->query($query)->fetch_all(MYSQLI_ASSOC);
+
+    return $result;
+
+}
+
 ?>

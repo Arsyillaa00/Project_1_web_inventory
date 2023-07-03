@@ -1,3 +1,21 @@
+### v.1.000.005
+-----
+
+fitur yang ditambah:
+- menampilkan data dari tabel user
+- mengatur jumlah data yang ditampilkan di setiap page
+- membuat tombol next & prev
+
+##### MENGAMBIL DATA DARI DATABASE
+fungsi untuk mengambil data di MYSQL, kemudian akan ditampilkan di file user.php
+- $mysql adalah nama database
+- $page adalah nama halaman pada tabel
+```php
+require_once "app/controller.php";
+tabel_user($mysql, $page);
+```
+hasil result menampilkan data nama dan email dari tabel user, namun data yang ditampilkan pada setiap page hanya memiliki limit 4 baris data. Data berupa array.
+
 ### v.1.000.004
 -----
 
@@ -14,7 +32,7 @@ fungsi untuk check table sudah ada atau belum
 require_once "app/controller.php";
 check_tabel_user($db);
 check_tabel_status($db);
-check_tabel_products($db)
+check_tabel_products($db);
 ```
 hasil result jika tabel user/status/products sudah ada = 1. Namun apabila tabel user/status/products belum ada, maka fungsi akan otomatis create tabel user/status/products dan membuat akun demo (jika berhasil nilainya 1, apabila gagal nilainya 0)
 
@@ -26,7 +44,7 @@ untuk fungsi products, menampilkan total dan tanggal terakhir update.
 require_once "app/controller.php";
 check_count_user($db);
 check_count_status($db);
-check_count_products($db)
+check_count_products($db);
 ```
 hasil result menampilkan jumlah data yang ada di dalam tabel user/status/products. Sedangkan untuk hasil result fungsi product menampilkan jumlah data dan tanggal terakhir update.
 
@@ -99,7 +117,7 @@ fungsi untuk check tabel user sudah ada isinya atau belum
 - $mysql adalah nama koneksi sql ke database
 ```php
 require_once "app/controller.php";
-check_tabel_user($mysql)
+check_tabel_user($mysql);
 ```
 hasil result jika tabel user sudah ada = 1. Namun apabila tabel user belum ada, maka fungsi akan otomatis create tabel user dan membuat akun demo (jika berhasil nilainya 1, apabila gagal nilainya 0)
 
@@ -110,6 +128,6 @@ fungsi untuk melakukan login dashboard
 - $password adalah nama attribut untuk password
 ```php
 require_once "../app/controller.php";
-login($mysql, $email, $password)
+login($mysql, $email, $password);
 ```
 hasil result jika berhasil login, maka data user akan menjadi session. Namun apabila gagal, maka form login akan di tampilkan lagi
