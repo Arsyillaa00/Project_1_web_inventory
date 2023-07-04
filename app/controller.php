@@ -204,11 +204,55 @@ function check_count_products($mysql){
 //fungsi untuk mengambil data di MYSQL, kemudian akan ditampilkan di file user.php
 function tabel_user($mysql, $page){
     $limit = 4*$page;
-    $query = "SELECT (@no:=@no+1) AS nomor, email, nama FROM user, (SELECT @no:=$limit) AS number ORDER BY id_user LIMIT $limit,4";
+    $query = "SELECT (@no:=@no+1) AS nomor, id_user, email, nama FROM user, (SELECT @no:=$limit) AS number ORDER BY id_user LIMIT $limit,4";
     $result = $mysql->query($query)->fetch_all(MYSQLI_ASSOC);
 
     return $result;
 
 }
 
+//fungsi untuk menambahkan data
+function insert_user($mysql,$post){
+    $nama = $mysql->real_escape_string($post['nama']);
+    $email = $mysql->real_escape_string($post['email']);
+    $password = $mysql->real_escape_string($post['password']);
+    $password2 = $mysql->real_escape_string($post['password2']);
+
+
+    //untuk konfirmasi ulang pass, jika nilai berbeda data tdk bisa diinput
+    if($password == $password2){
+
+        //cek ada data atau tdk
+        $check = $mysql->query("SELECT id_user FROM user WHERE nama='$nama' AND email='$email'")->num_rows;
+
+        if($check){
+            return 0;
+        }else{
+            $mysql->query("INSERT INTO user(nama,email,password) VALUES ('$nama','$email','$password')");
+            return $mysql->affected_rows;
+        }
+    }else{
+        return 0;
+    }
+
+    //mecegah sql injection
+    //$name = mysqli_real_escape_string($mysql, $name);
+    //$name = $mysql->real_escape_string($name);
+     
+}
+
+//fungsi untuk hapus data
+function delete_user($mysql,$id_user){
+    $id = $mysql->real_escape_string($id_user);
+
+    //perulangan untuk mencegah hapus id/akun yg digunakan untuk login
+    if($id == $_SESSION['id_user']){
+        return 0;
+    }else{
+        $mysql->query("DELETE FROM user WHERE id_user='$id' ");
+        return $mysql->affected_rows;
+    }
+
+    
+}
 ?>

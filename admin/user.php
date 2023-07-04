@@ -59,7 +59,7 @@
                         <td>".$results['nama']."</td>
                         <td>
                             <a>Edit</a>
-                            <a>Hapus</a>
+                            <a href='form.php?page=delete&id=".$results['id_user']."'>Hapus</a>
                         </td>
                     </tr>";
         }

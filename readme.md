@@ -1,3 +1,30 @@
+### v.1.000.006
+-----
+
+fitur yang ditambah:
+- menambahkan data
+- hapus data
+
+##### MENAMBAHKAN DATA
+fungsi untuk menambahkan data ke database
+- $mysql adalah nama database
+- $post adalah nama untuk data yang diinputkan
+```php
+require_once "app/controller.php";
+insert_user($mysql,$post);
+```
+hasil result menambahkan data ke dalam database. jika data nama,email,password sudah dipakai, maka akan muncul notifikasi gagal diinput.
+
+##### MENGHAPUS DATA
+fungsi untuk menghapus data ke database
+- $mysql adalah nama database
+- $id_user adalah nama untuk mencari id dari data yang akan dihapus
+```php
+require_once "app/controller.php";
+delete_user($mysql,$id_user);
+```
+hasil result menghapus data yang ada di database, dan data yang dihapus sesuai dengan request dari user. Apabila data yang dihapus adalah data yang digunakan untuk login, maka tombol hapus untuk data tersebut tidak akan berfungsi.
+
 ### v.1.000.005
 -----
 

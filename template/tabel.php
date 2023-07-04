@@ -1,4 +1,4 @@
-<a href="">Tambah Data</a>
+<a href="form.php?page=create">Tambah Data</a>
 <table> 
     <thead> 
         <tr>
