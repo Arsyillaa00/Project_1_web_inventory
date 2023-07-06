@@ -87,6 +87,52 @@
 
             break;
 
+            case 'edit':
+                $id_user = $_GET['id']??"";
+
+                if($id_user){
+                    
+                    $result = detail_user($db,$id_user);
+
+                    if(empty($result)){
+                        //notifikasi saat data yg di input kosong
+                        print "<script>alert('id user tidak ada!')</script>";
+                    }else{
+                        $nama = $result['nama'];
+                        $email = $result['email'];
+                        $status = $result['status'];
+
+                        include '../template/form_edit.php';
+                    }
+
+                }else{
+                    //notifikasi saat data yg di input sama
+                    print "<script>alert('id user tidak ada!')</script>";
+                }
+
+                
+
+            break;
+
+            case 'update':
+                $post = $_POST??[];
+                $post['id']=$_GET['id'];
+                $result = update_user($db,$post);
+
+                if($result){
+                    
+                    //notifikasi saat data yg di update berhasil
+                    print "<script>alert('data berhasil diupdate!')</script>";
+                }else{
+                    //notifikasi saat data yg di update gagal
+                    print "<script>alert('data gagal diupdate!')</script>";
+                }
+
+                //perintah untuk redirect
+                header("Location: user.php");
+
+            break;
+
             default: 
                 //perintah untuk redirect
                 header("Location: ../index.php");

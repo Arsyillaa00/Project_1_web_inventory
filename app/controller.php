@@ -255,4 +255,58 @@ function delete_user($mysql,$id_user){
 
     
 }
+
+//fungsi untuk fitur profil
+function detail_user($mysql,$id_user){
+    $id = $mysql->real_escape_string($id_user);
+    $query = "SELECT nama, email, status FROM user WHERE id_user = '$id'";
+    $result = $mysql->query($query)->fetch_assoc();
+    return $result;
+
+}
+
+//fungsi untuk update data
+function update_user($mysql,$profil){
+    $id = $mysql->real_escape_string($profil['id']);
+    $nama = $mysql->real_escape_string($profil['nama']);
+    $email = $mysql->real_escape_string($profil['email']);
+    $status = $mysql->real_escape_string($profil['status']);
+
+    $mysql->query("UPDATE user SET nama = '$nama', email = '$email', status = '$status' WHERE id_user = '$id'");
+    return $mysql->affected_rows;
+
+}
+
+//fungsi untuk update session
+function update_session($profil){
+    $id = $profil['id'];
+    $nama = $profil['nama'];
+    $email = $profil['email'];
+    $status = $profil['status'];
+
+    if($id == $_SESSION['id_user']){
+        $_SESSION['nama'] = $nama;
+        $_SESSION['email'] = $email;
+        $_SESSION['status'] = $status;
+
+    }
+}
+
+//
+function list_status($mysql){
+    $query = "SELECT * FROM status";
+    $result = $mysql->query($query)->fetch_all(MYSQLI_ASSOC);
+
+    return $result;
+}
+
+//fungsi untuk nilai di bagian status
+function get_status($mysql,$id_status){
+    $id = $mysql->real_escape_string($id_status);
+
+    $query = "SELECT title FROM status WHERE id_status = '$id'";
+    $result = $mysql->query($query)->fetch_assoc();
+
+    return $result;
+}
 ?>

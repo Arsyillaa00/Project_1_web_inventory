@@ -7,6 +7,6 @@
 </ul>
 
 <ul> 
-    <li><a href="profil.php">Profil</a></li>
+    <li><a href="profil.php?id=<?php echo $_SESSION['id_user']; ?>">Profil</a></li>
     <li><a href="logout.php">Logout</a></li>
 </ul>

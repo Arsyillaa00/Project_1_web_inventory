@@ -1,3 +1,30 @@
+### v.1.000.007
+-----
+
+fitur yang ditambah:
+- edit data user
+- profil (detail profil user)
+
+##### EDIT DATA USER
+fungsi untuk mengedit data user
+- $db adalah nama database
+- $post adalah nama untuk data yang diinputkan
+```php
+require_once "app/controller.php";
+update_user($db,$post);
+```
+hasil result data yang diubah nama, email, status. jika id user sama dengan session yang digunakan secara otomatis memperbarui session.
+
+##### PROFIL (DETAIL PROFIL USER)
+fungsi untuk menampilkan fitur profil
+- $db adalah nama database
+- $id adalah nama untuk id_user
+```php
+require_once "app/controller.php";
+detail_user($db,$id);
+```
+hasil result berupa array.
+
 ### v.1.000.006
 -----
 

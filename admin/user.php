@@ -58,8 +58,10 @@
                         <td>".$results['email']."</td>
                         <td>".$results['nama']."</td>
                         <td>
-                            <a>Edit</a>
+                            <a href='form.php?page=edit&id=".$results['id_user']."'>Edit</a>
                             <a href='form.php?page=delete&id=".$results['id_user']."'>Hapus</a>
+                            <a href='profil.php?id=".$results['id_user']."'>Detail</a>
+
                         </td>
                     </tr>";
         }
