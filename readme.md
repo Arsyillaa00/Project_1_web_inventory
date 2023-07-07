@@ -1,3 +1,41 @@
+### v.1.000.008
+-----
+
+fitur yang ditambah:
+- tabel status
+- edit data status
+- tambah data status
+
+##### MENGAMBIL DATA STATUS DARI DATABASE
+fungsi untuk mengambil data status di MYSQL, kemudian akan ditampilkan di file status.php
+- $db adalah nama database
+- $page adalah nama halaman pada tabel
+```php
+require_once "app/controller.php";
+tabel_status($db, $page);
+```
+hasil result menampilkan data title dan level dari tabel status, namun data yang ditampilkan pada setiap page hanya memiliki limit 4 baris data. Data berupa array.
+
+##### EDIT DATA STATUS
+fungsi untuk mengedit data status
+- $db adalah nama database
+- $post adalah nama untuk data yang diinputkan
+```php
+require_once "app/controller.php";
+update_status($db,$post);
+```
+hasil result data yang diubah title dan level.
+
+##### MENAMBAHKAN DATA STATUS
+fungsi untuk menambahkan data status ke database
+- $mysql adalah nama database
+- $post adalah nama untuk data yang diinputkan
+```php
+require_once "app/controller.php";
+insert_status($db,$post);
+```
+hasil result menambahkan data status ke dalam database. jika data title dan level sudah dipakai, maka akan muncul notifikasi gagal diinput.
+
 ### v.1.000.007
 -----
 
@@ -29,26 +67,26 @@ hasil result berupa array.
 -----
 
 fitur yang ditambah:
-- menambahkan data
-- hapus data
+- menambahkan data user
+- hapus data user
 
-##### MENAMBAHKAN DATA
-fungsi untuk menambahkan data ke database
-- $mysql adalah nama database
+##### MENAMBAHKAN DATA USER
+fungsi untuk menambahkan data user ke database
+- $db adalah nama database
 - $post adalah nama untuk data yang diinputkan
 ```php
 require_once "app/controller.php";
-insert_user($mysql,$post);
+insert_user($db,$post);
 ```
 hasil result menambahkan data ke dalam database. jika data nama,email,password sudah dipakai, maka akan muncul notifikasi gagal diinput.
 
-##### MENGHAPUS DATA
-fungsi untuk menghapus data ke database
-- $mysql adalah nama database
+##### MENGHAPUS DATA USER
+fungsi untuk menghapus data user ke database
+- $db adalah nama database
 - $id_user adalah nama untuk mencari id dari data yang akan dihapus
 ```php
 require_once "app/controller.php";
-delete_user($mysql,$id_user);
+delete_user($db,$id_user);
 ```
 hasil result menghapus data yang ada di database, dan data yang dihapus sesuai dengan request dari user. Apabila data yang dihapus adalah data yang digunakan untuk login, maka tombol hapus untuk data tersebut tidak akan berfungsi.
 
@@ -60,13 +98,13 @@ fitur yang ditambah:
 - mengatur jumlah data yang ditampilkan di setiap page
 - membuat tombol next & prev
 
-##### MENGAMBIL DATA DARI DATABASE
-fungsi untuk mengambil data di MYSQL, kemudian akan ditampilkan di file user.php
-- $mysql adalah nama database
+##### MENGAMBIL DATA USER DARI DATABASE
+fungsi untuk mengambil data user di MYSQL, kemudian akan ditampilkan di file user.php
+- $db adalah nama database
 - $page adalah nama halaman pada tabel
 ```php
 require_once "app/controller.php";
-tabel_user($mysql, $page);
+tabel_user($db, $page);
 ```
 hasil result menampilkan data nama dan email dari tabel user, namun data yang ditampilkan pada setiap page hanya memiliki limit 4 baris data. Data berupa array.
 

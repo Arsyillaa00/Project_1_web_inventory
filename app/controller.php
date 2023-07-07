@@ -189,7 +189,7 @@ function check_count_status($mysql){
     $query = "SELECT * FROM status";
     $result = $mysql->query($query)->num_rows;
 
-    return "total tabel status: ".$result;
+    return $result;
 }
 
 //fungsi utk check total data products yg ada di tabel
@@ -211,7 +211,7 @@ function tabel_user($mysql, $page){
 
 }
 
-//fungsi untuk menambahkan data
+//fungsi untuk menambahkan data user
 function insert_user($mysql,$post){
     $nama = $mysql->real_escape_string($post['nama']);
     $email = $mysql->real_escape_string($post['email']);
@@ -292,7 +292,7 @@ function update_session($profil){
     }
 }
 
-//
+//list keseluruhan tabel status
 function list_status($mysql){
     $query = "SELECT * FROM status";
     $result = $mysql->query($query)->fetch_all(MYSQLI_ASSOC);
@@ -308,5 +308,51 @@ function get_status($mysql,$id_status){
     $result = $mysql->query($query)->fetch_assoc();
 
     return $result;
+}
+
+//fungsi untuk mengambil data di MYSQL, kemudian akan ditampilkan di file status.php
+function tabel_status($mysql, $page){
+    $limit = 4*$page;
+    $query = "SELECT (@no:=@no+1) AS nomor, id_status, title, level FROM status, (SELECT @no:=$limit) AS number ORDER BY id_status LIMIT $limit,4";
+    $result = $mysql->query($query)->fetch_all(MYSQLI_ASSOC);
+
+    return $result;
+    
+}
+
+//fungsi untuk menambahkan data status
+function insert_status($mysql,$post){
+    $nama = $mysql->real_escape_string($post['title']);
+
+    //cek ada data atau tdk
+    $check = $mysql->query("SELECT id_status FROM status WHERE title='$nama'")->num_rows;
+
+    if($check){
+        return 0;
+    }else{
+        $mysql->query("INSERT INTO status(title) VALUES ('$nama')");
+        return $mysql->affected_rows;
+    }
+    
+}
+
+//fungsi untuk fitur profil
+function detail_status($mysql,$id_status){
+    $id = $mysql->real_escape_string($id_status);
+    $query = "SELECT title, level FROM status WHERE id_status = '$id'";
+    $result = $mysql->query($query)->fetch_assoc();
+    return $result;
+
+}
+
+//fungsi untuk update data
+function update_status($mysql,$profil){
+    $id = $mysql->real_escape_string($profil['id']);
+    $nama = $mysql->real_escape_string($profil['title']);
+    $level = $mysql->real_escape_string($profil['level']);
+
+    $mysql->query("UPDATE status SET title = '$nama', level = '$level' WHERE id_status = '$id'");
+    return $mysql->affected_rows;
+
 }
 ?>
