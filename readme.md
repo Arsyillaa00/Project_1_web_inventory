@@ -1,3 +1,41 @@
+### g
+-----
+
+fitur yang ditambah:
+- menampilkan data dari tabel products
+- edit data products
+- tambah data products
+
+##### MENGAMBIL DATA PRODUCTS DARI DATABASE
+fungsi untuk mengambil data products di MYSQL, kemudian akan ditampilkan di file products.php
+- $db adalah nama database
+- $page adalah nama halaman pada tabel
+```php
+require_once "app/controller.php";
+tabel_products($db, $page);
+```
+hasil result menampilkan data nama, harga, total, status, tanggal dibuat dan tanggal update dari tabel products, namun data yang ditampilkan pada setiap page hanya memiliki limit 4 baris data. Data berupa array.
+
+##### EDIT DATA PRODUCTS
+fungsi untuk mengedit data status
+- $db adalah nama database
+- $post adalah nama untuk data yang diinputkan
+```php
+require_once "app/controller.php";
+update_products($db,$post);
+```
+hasil result data yang diubah nama, harga, total, dan status.
+
+##### MENAMBAHKAN DATA PRODUCTS
+fungsi untuk menambahkan data status ke database
+- $mysql adalah nama database
+- $post adalah nama untuk data yang diinputkan
+```php
+require_once "app/controller.php";
+insert_products($db,$post);
+```
+hasil result menambahkan data products ke dalam database. jika data nama, harga, total, dan status sudah dipakai, maka akan muncul notifikasi gagal diinput.
+
 ### v.1.000.008
 -----
 

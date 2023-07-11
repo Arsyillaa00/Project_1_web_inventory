@@ -355,4 +355,49 @@ function update_status($mysql,$profil){
     return $mysql->affected_rows;
 
 }
+
+//fungsi untuk mengambil data di MYSQL, kemudian akan ditampilkan di file products.php
+function tabel_products($mysql, $page){
+    $limit = 4*$page;
+    $query = "SELECT (@no:=@no+1) AS nomor, id_products, nama_products, harga, total, IF(status = 1, 'aktif', 'tidak aktif') AS status, date_c, date_m FROM products, (SELECT @no:=$limit) AS number ORDER BY id_products LIMIT $limit,4";
+    $result = $mysql->query($query)->fetch_all(MYSQLI_ASSOC);
+
+    return $result;
+
+}
+
+//fungsi untuk fitur products
+function detail_product($mysql,$id_products){
+    $id = $mysql->real_escape_string($id_products);
+    $query = "SELECT nama_products, harga, total, status, date_c, date_m FROM products WHERE id_products = '$id'";
+    $result = $mysql->query($query)->fetch_assoc();
+    return $result;
+
+}
+
+//fungsi untuk menambahkan data products
+function insert_products($mysql,$post){
+    $nama_products = $mysql->real_escape_string($post['nama_products']);
+    $harga = $mysql->real_escape_string($post['harga']);
+    $total = $mysql->real_escape_string($post['total']);
+    $status = 0;
+    $date_c = time();
+    $date_m = 0;
+
+    $mysql->query("INSERT INTO products(nama_products, harga, total, status, date_c, date_m) VALUES ('$nama_products', '$harga', '$total', '$status', '$date_c', '$date_m')");
+    return $mysql->affected_rows;
+}
+
+//fungsi untuk update products
+function update_products($mysql,$post){
+    $id = $mysql->real_escape_string($post['id']);
+    $nama_products = $mysql->real_escape_string($post['nama_products']);
+    $harga = $mysql->real_escape_string($post['harga']);
+    $total = $mysql->real_escape_string($post['total']);
+    $status = $mysql->real_escape_string($post['status']);
+    $date_m = time();
+
+    $mysql->query("UPDATE products SET nama_products = '$nama_products', harga = '$harga', total = '$total', status = '$status', date_m = '$date_m' WHERE id_products = '$id'");
+    return $mysql->affected_rows;
+}
 ?>

@@ -5,28 +5,47 @@
 
     switch($form){
         case 'user':
-            $input = "  <label for=''>Nama</label>
-                        <input type='text' name='nama' placeholder='masukkan nama lengkap' required>
-                        <br>
-                        <label for=''>Email</label>
-                        <input type='email' name='email' placeholder='xxx@gmail.com' required>
-                        <br>
-                        <label for=''>Password</label>
-                        <input type='password' name='password' placeholder='masukkan password 8 karakter' required>
-                        <br>
-                        <label for=''>Masukkan Ulang Password</label>
-                        <input type='password' name='password2' placeholder='masukkan ulang password' required>
+            $input = "  <div class='input-group mb-3'>
+                            <label class='input-group-text' for='nama'><i class='fa-solid fa-user'></i></label>
+                            <input class='form-control' type='text' id='nama' name='nama' placeholder='masukkan nama lengkap' required>
+                        </div>
+                        <div class='input-group mb-3'>
+                            <label class='input-group-text' for='email'><i class='fa-solid fa-envelope'></i></label>
+                            <input class='form-control' type='email' id='email' name='email' placeholder='xxx@gmail.com' required>
+                        </div>
+                        <div class='input-group mb-3'>
+                            <label class='input-group-text' for='password'><i class='fa-solid fa-lock'></i></label>
+                            <input class='form-control' type='password' id='password' name='password' placeholder='masukkan password 8 karakter' required>
+                        </div>
+                        <div class='input-group mb-3'>
+                            <label class='input-group-text' for='password2'><i class='fa-solid fa-lock'></i></label>
+                            <input class='form-control' type='password' id='password2' name='password2' placeholder='masukkan ulang password' required>
+                        </div>
                      ";
         break;
 
         case 'status':
-            $input = "
-                        <label>Title</label>
-                        <input type='text' name='title' placeholder='masukkan status saat ini' required>
+            $input = "  <div class='input-group mb-3'>
+                            <label class='input-group-text' for='title'><i class='fa-solid fa-user'></i></label>
+                            <input class='form-control' id='title' type='text' name='title' placeholder='masukkan status saat ini' required>
+                        </div>
                      ";
         break;
 
         case 'products':
+            $input = "  <div class='input-group mb-3'>
+                            <label class='input-group-text' for='nama_products'><i class='fa-solid fa-tag'></i></label>
+                            <input class='form-control' id='nama_products' type='text' name='nama_products' placeholder='masukkan nama product' required>
+                        </div>
+                        <div class='input-group mb-3'>
+                            <label class='input-group-text' for='harga'><i class='fa-solid fa-dollar-sign'></i></label>
+                            <input class='form-control' id='harga' type='text' name='harga' placeholder='0' required>
+                        </div>
+                        <div class='input-group mb-3'>
+                            <label class='input-group-text' for='total'><i class='fa-sharp fa-solid fa-box'></i></label>
+                            <input class='form-control' id='total' type='text' name='total' placeholder='0' required>
+                        </div>
+                     ";
         break;
 
         default :
@@ -36,13 +55,26 @@
     }
 ?>
 
-<form action="?page=insert&db=<?php echo $form;?>" method="POST" >
-    <?php echo $input;?>
-
-    <br>
-    <button type="submit" class="btn btn-primary">SUBMIT</button>
-    <button type="reset" class="btn btn-warning">Reset</button>
-</form>
+<main class="col-10 p-3">
+    <section class="countainer">
+        <div class="row">
+            <div class="col-12">
+                <form class="card" action="?page=insert&db=<?php echo $form;?>" method="POST" >
+                    <div class="card-header">
+                        <h3>Form Input <span class="text-danger text-uppercase"><?php echo $form; ?></span></h3>
+                    </div>
+                    <div class="card-body">
+                        <?php echo $input;?>  
+                    </div>
+                    <div class="card-footer">
+                        <button data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="This top tooltip is themed via CSS variables." type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk me-2"></i>SUBMIT</button>
+                        <button type="reset" class="btn btn-warning"><i class="fa-solid fa-rotate me-2"></i>Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
 
 <!-- untuk melihat data 
 <script type="text/javascript">
