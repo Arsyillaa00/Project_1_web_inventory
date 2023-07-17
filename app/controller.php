@@ -222,7 +222,7 @@ function insert_user($mysql,$post){
     //untuk konfirmasi ulang pass, jika nilai berbeda data tdk bisa diinput
     if($password == $password2){
 
-        //cek ada data atau tdk
+        //cek email sudah digunakan atau belum
         $check = $mysql->query("SELECT id_user FROM user WHERE nama='$nama' AND email='$email'")->num_rows;
 
         if($check){
