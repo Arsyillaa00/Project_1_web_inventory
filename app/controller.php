@@ -252,8 +252,6 @@ function delete_user($mysql,$id_user){
         $mysql->query("DELETE FROM user WHERE id_user='$id' ");
         return $mysql->affected_rows;
     }
-
-    
 }
 
 //fungsi untuk fitur profil
@@ -367,7 +365,7 @@ function tabel_products($mysql, $page){
 }
 
 //fungsi untuk fitur products
-function detail_product($mysql,$id_products){
+function detail_products($mysql,$id_products){
     $id = $mysql->real_escape_string($id_products);
     $query = "SELECT nama_products, harga, total, status, date_c, date_m FROM products WHERE id_products = '$id'";
     $result = $mysql->query($query)->fetch_assoc();
@@ -400,4 +398,50 @@ function update_products($mysql,$post){
     $mysql->query("UPDATE products SET nama_products = '$nama_products', harga = '$harga', total = '$total', status = '$status', date_m = '$date_m' WHERE id_products = '$id'");
     return $mysql->affected_rows;
 }
+
+//fungsi untuk delete status
+function delete_status($mysql,$id_status){
+    $id = $mysql->real_escape_string($id_status);
+
+    //perulangan untuk mencegah hapus id/akun yg digunakan untuk login
+    if($id == $_SESSION['id_status']){
+        return 0;
+    }else{
+        $mysql->query("DELETE FROM status WHERE id_status='$id' ");
+        return $mysql->affected_rows;
+    }
+}
+
+//fungsi untuk delete status
+function delete_products($mysql,$id_products){
+    $id = $mysql->real_escape_string($id_products);
+
+    //perulangan untuk mencegah hapus id/akun yg digunakan untuk login
+    if($id == $_SESSION['id_products']){
+        return 0;
+    }else{
+        $mysql->query("DELETE FROM products WHERE id_products='$id' ");
+        return $mysql->affected_rows;
+    }
+}
+
+//fungsi untuk menampilkan product yg aktif
+function products_aktif($mysql, $page){
+    $limit = 4*$page;
+    $query = "SELECT (@no:=@no+1) AS nomor, id_products, nama_products, harga, total, date_m FROM products, (SELECT @no:=$limit) AS number WHERE status='1' ORDER BY id_products LIMIT $limit,4";
+    $result = $mysql->query($query)->fetch_all(MYSQLI_ASSOC);
+
+    return $result;
+}
+
+//fungsi untuk ke page lain pada tampilan daftar products dari sisi user
+function check_count_products_aktif($mysql){
+    $query = "SELECT COUNT(*), date_m FROM products ORDER BY date_m DESC LIMIT 1"; /*ASC = urutan dr kecil ke besar, DESC = urutan dr besar ke kecil */
+    $result = $mysql->query($query)->fetch_row();
+    $time = date("d-m-Y",$result[1]);
+
+    return "total tabel products: ".$result[0]." terakhir update ".$time;
+}
+
+
 ?>

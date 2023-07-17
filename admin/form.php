@@ -84,10 +84,27 @@
             break;
 
             case 'delete':
-                $id_user = $_GET['id']??"";
+                $id = $_GET['id']??"";
 
-                if($id_user){
-                    $result = delete_user($db,$id_user);
+                if($id){
+                    $form_name = $_GET['db']??"";
+                    $result = "";
+                    switch($form_name){
+                        case 'user':
+                            $result = delete_user($db,$id);
+                        break;
+                        
+                        case "status":
+                            $result = delete_status($db,$id);
+                        break;
+
+                        case "products":
+                            $result = delete_products($db,$id);
+                        break;
+
+                        default:
+                        break;
+                    }
                     
                     if($result){
                         //notifikasi saat data yg di input sama
@@ -103,19 +120,19 @@
                 }
 
                 //perintah untuk redirect
-                header("Location: user.php?db=user");
+                header("Location: ".$form_name.".php?db=".$form_name);
 
             break;
 
             case 'edit':
-                $id_user = $_GET['id']??"";
+                $id = $_GET['id']??"";
                 $result = "";
                 $form_name = $_GET['db']??"";
 
-                if($id_user){
+                if($id){
                     switch($form_name){
                         case "user":
-                            $result = detail_user($db,$id_user);
+                            $result = detail_user($db,$id);
 
                             if(empty($result)){
                                 //notifikasi saat data yg di input kosong
@@ -130,7 +147,7 @@
                         break;
 
                         case "status":
-                            $result = detail_status($db,$id_user);
+                            $result = detail_status($db,$id);
 
                             if(empty($result)){
                                 //notifikasi saat data yg di input kosong
@@ -144,7 +161,7 @@
                         break;
 
                         case "products":
-                            $result = detail_product($db,$id_user);
+                            $result = detail_products($db,$id);
 
                             if(empty($result)){
                                 //notifikasi saat data yg di input kosong

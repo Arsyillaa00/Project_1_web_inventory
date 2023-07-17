@@ -27,7 +27,7 @@
         case 'status':
             $input = "  <div class='input-group mb-3'>
                             <label class='input-group-text' for='title'><i class='fa-solid fa-user'></i></label>
-                            <input class='form-control' id='title' type='text' name='title' placeholder='masukkan status saat ini' required>
+                            <input class='form-control' id='title' type='text' name='title' placeholder='masukkan nama status' required>
                         </div>
                      ";
         break;

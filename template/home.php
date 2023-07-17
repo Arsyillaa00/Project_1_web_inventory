@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="card-footer">
-                    <a href="admin/dashboard.php" class="btn btn-warning">Visit Link</a>
+                    <a href="user/index.php" class="btn btn-warning">Visit Link</a>
                 </div>
             </div>
         </div>

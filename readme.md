@@ -1,3 +1,32 @@
+### v.1.000.010
+-----
+
+fitur yang ditambah:
+- menampilkan detail products, user, dan status
+- menampilkan products aktif pada page user
+
+##### MENAMPILKAN DETAIL PRODUCTS, USER DAN STATUS
+fungsi untuk mengambil data products di MYSQL, kemudian akan ditampilkan di file products.php
+- $db adalah nama database
+- $id adalah nama untuk id_user yang berfungsi untuk mencari id dari data yang akan ditampilkan
+```php
+require_once "app/controller.php";
+detail_user($db,$id);
+detail_status($db,$id);
+detail_products($db,$id);
+```
+hasil result menampilkan detail data dari tabel products, user, dan status.
+
+##### MENAMPILKAN DATA PRODUCTS BERSTATUS AKTIF PADA PAGE USER
+fungsi untuk mengambil data products di MYSQL, kemudian akan ditampilkan di file index.php pada folder user
+- $db adalah nama database
+```php
+require_once "app/controller.php";
+check_count_products_aktif($db);
+```
+hasil result menampilkan data nama, harga, total, dan tanggal update dari tabel products, namun data yang ditampilkan pada setiap page hanya memiliki limit 4 baris data. Data berupa array.
+
+
 ### v.1.000.009
 -----
 
@@ -94,7 +123,7 @@ hasil result data yang diubah nama, email, status. jika id user sama dengan sess
 ##### PROFIL (DETAIL PROFIL USER)
 fungsi untuk menampilkan fitur profil
 - $db adalah nama database
-- $id adalah nama untuk id_user
+- $id adalah nama untuk id_user yang berfungsi untuk mencari id dari data yang akan ditampilkan
 ```php
 require_once "app/controller.php";
 detail_user($db,$id);
@@ -121,10 +150,10 @@ hasil result menambahkan data ke dalam database. jika data nama,email,password s
 ##### MENGHAPUS DATA USER
 fungsi untuk menghapus data user ke database
 - $db adalah nama database
-- $id_user adalah nama untuk mencari id dari data yang akan dihapus
+- $id adalah nama untuk mencari id dari data yang akan dihapus
 ```php
 require_once "app/controller.php";
-delete_user($db,$id_user);
+delete_user($db,$id);
 ```
 hasil result menghapus data yang ada di database, dan data yang dihapus sesuai dengan request dari user. Apabila data yang dihapus adalah data yang digunakan untuk login, maka tombol hapus untuk data tersebut tidak akan berfungsi.
 
