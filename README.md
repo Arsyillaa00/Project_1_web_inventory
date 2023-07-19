@@ -1,3 +1,26 @@
+### v.1.000.011
+-----
+##### DEPRECATED
+- products_aktif($mysql, $page)
+- check_count_products_aktif($mysql)
+
+##### NEW
+- class Konsumen
+
+##### class Konsumen
+fungsi untuk memanggil class Konsumen
+- $db adalah nama database
+- $page adalah nama untuk halaman yang akan menampilkan products
+- $search adalah nama untuk fitur pencarian product
+```php
+require_once "app/controller.php";
+$konsumen = new Konsumen($db,$page); //memanggil new class
+$input = $konsumen->search($search); //set pencarian
+$products = $konsumen->products(); //menampilkan list products dengan limit 12
+$prev = $konsumen->prev(); //menampilkan tombol prev
+$next = $konsumen->next(); //menampilkan tombol next
+```
+
 ### v.1.000.010
 -----
 

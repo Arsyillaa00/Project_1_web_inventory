@@ -74,7 +74,7 @@
     <section class="countainer">
         <div class="row">
             <div class="col-12">
-                <form class="card" action="?page=update&id=<?php echo $id_user; ?>&db=<?php echo $form_edit;?>" method="POST">
+                <form class="card" action="?page=update&id=<?php echo $id; ?>&db=<?php echo $form_edit;?>" method="POST">
                     <div class="card-header">
                         <h3>Form Edit <span class="text-danger text-uppercase"><?php echo $form_edit; ?></span></h3>
                     </div>
