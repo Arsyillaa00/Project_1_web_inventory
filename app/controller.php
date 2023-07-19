@@ -425,23 +425,23 @@ function delete_products($mysql,$id_products){
     }
 }
 
-//fungsi untuk menampilkan product yg aktif
+/*fungsi untuk menampilkan product yg aktif
 function products_aktif($mysql, $page){
     $limit = 4*$page;
     $query = "SELECT (@no:=@no+1) AS nomor, id_products, nama_products, harga, total, date_m FROM products, (SELECT @no:=$limit) AS number WHERE status='1' ORDER BY id_products LIMIT $limit,4";
     $result = $mysql->query($query)->fetch_all(MYSQLI_ASSOC);
 
     return $result;
-}
+}*/
 
-//fungsi untuk ke page lain pada tampilan daftar products dari sisi user
+/*fungsi untuk ke page lain pada tampilan daftar products dari sisi user
 function check_count_products_aktif($mysql){
-    $query = "SELECT COUNT(*), date_m FROM products ORDER BY date_m DESC LIMIT 1"; /*ASC = urutan dr kecil ke besar, DESC = urutan dr besar ke kecil */
+    $query = "SELECT COUNT(*), date_m FROM products ORDER BY date_m DESC LIMIT 1"; //ASC = urutan dr kecil ke besar, DESC = urutan dr besar ke kecil
     $result = $mysql->query($query)->fetch_row();
     $time = date("d-m-Y",$result[1]);
 
     return "total tabel products: ".$result[0]." terakhir update ".$time;
-}
+}*/
 
 //class untuk menampilkan product yg aktif
 class Konsumen{
