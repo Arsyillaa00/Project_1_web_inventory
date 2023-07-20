@@ -40,6 +40,46 @@
 
         switch($page){
             case "create":
+                $form = User::DB;
+                $input = "";
+
+                switch($form){
+                    case 'user':
+                        $input = User::form();
+                    break;
+
+                    case 'status':
+                        $input = "  <div class='input-group mb-3'>
+                                        <label class='input-group-text' for='title'><i class='fa-solid fa-user'></i></label>
+                                        <input class='form-control' id='title' type='text' name='title' placeholder='masukkan nama status' required>
+                                    </div>
+                                ";
+                    break;
+
+                    case 'products':
+                        $input = "  <div class='input-group mb-3'>
+                                        <label class='input-group-text' for='nama_products'><i class='fa-solid fa-tag'></i></label>
+                                        <input class='form-control' id='nama_products' type='text' name='nama_products' placeholder='masukkan nama product' required>
+                                    </div>
+                                    <div class='input-group mb-3'>
+                                        <label class='input-group-text' for='harga'><i class='fa-solid fa-dollar-sign'></i></label>
+                                        <input class='form-control' id='harga' type='text' name='harga' placeholder='0' required>
+                                    </div>
+                                    <div class='input-group mb-3'>
+                                        <label class='input-group-text' for='total'><i class='fa-sharp fa-solid fa-box'></i></label>
+                                        <input class='form-control' id='total' type='text' name='total' placeholder='0' required>
+                                    </div>
+                                ";
+                    break;
+
+                    default :
+                        //perintah untuk redirect
+                        header("Location: ../index.php");
+                    break;
+                }
+
+
+
                 //memanggil file form_input.php
                 include "../template/form_input.php";
             break;
@@ -50,11 +90,13 @@
                 if(empty($post)){
                     header("Location: ../index.php");
                 }else{
-                    $form_name = $_GET['db']??"";
+                    $form_name = User::DB;
+                    $query = "";
                     $result = "";
                     switch($form_name){
                         case "user":
-                            $result = insert_user($db,$post);
+                            $query = new User($db,0);
+                            $result = $query->insert($post);
                         break;
 
                         case "status":
@@ -87,11 +129,13 @@
                 $id = $_GET['id']??"";
 
                 if($id){
-                    $form_name = $_GET['db']??"";
+                    $form_name = User::DB;
+                    $query = "";
                     $result = "";
                     switch($form_name){
                         case 'user':
-                            $result = delete_user($db,$id);
+                            $query = new User($db,0);
+                            $result = $query->delete($id);
                         break;
                         
                         case "status":

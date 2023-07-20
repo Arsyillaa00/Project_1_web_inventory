@@ -1,6 +1,6 @@
 <?php 
 
-    $tabel = $_GET['db']??"";
+    /*$tabel = $_GET['db']??"";
     $head = "";
 
     switch($tabel){
@@ -39,7 +39,7 @@
             //perintah untuk redirect
             header("Location: ../index.php");
         break;
-    }
+    }*/
 
 ?>
 
@@ -49,11 +49,11 @@
             <div class="col-12">
                 <table class="table table-bordered table-striped caption-top shadow"> 
                     <thead class="table-dark"> 
-                        <?php echo $head;?>
+                        <?php echo $header;?>
                     </thead> 
 
                     <tbody>
-                        <?php  echo $html;?>
+                        <?php  echo $list;?>
                     </tbody>
 
                     <tfoot>
@@ -67,12 +67,9 @@
                     <caption>
                         <div class="d-flex justify-content-between">
                             <div class="px-2 fw-bold">
-                                <?php echo $count_data; ?>
+                                <?php echo $tabels; ?>
                             </div>
-                            <a class="btn btn-primary" href="form.php?page=create&db=<?php echo $tabel;?>">
-                                <span class="fa-solid fa-plus"></span>    
-                                Tambah Data
-                            </a>
+                            <?php echo $new; ?>
                         </div>
                     </caption>
                 </table>

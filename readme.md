@@ -1,3 +1,31 @@
+### v.1.000.012
+-----
+##### DEPRECATED
+- check_tabel_user($mysql)
+- tabel_user($mysql, $page)
+- check_count_user($mysql)
+- insert_user($mysql,$post)
+- delete_user($mysql,$id_user)
+
+##### NEW
+- class User
+
+##### class Konsumen
+fungsi untuk memanggil class User
+- $db adalah nama database
+- $page adalah nama untuk halaman yang akan menampilkan products
+```php
+require_once "app/controller.php";
+$user = new User($db,$page); //memanggil new class
+$new = $user->new(); //tombol untuk menambah data
+$tabels = $user->tabel(); //untuk cek eksistensi tabel user
+$count = $user->count(); //untuk menampilkan jumlah data
+$header = $user->header(); //untuk menampilkan header tabel
+$list = $user->list(); //untuk menampilkan list data dari tabel user
+$prev = $user->prev(); //menampilkan tombol prev
+$next = $user->next(); //menampilkan tombol next
+```
+
 ### v.1.000.011
 -----
 ##### DEPRECATED

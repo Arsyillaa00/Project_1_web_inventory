@@ -33,59 +33,26 @@
 
     //mengecheck session user
     if(isset($_SESSION['id_user'])){
-        //jika session tersimpan, perintah dibawah akan dijalankan
-        login_status($_SESSION);
         
-        //check tabel user ada/tdk
-        $user = check_tabel_user($db);
-        $count_data = $user?"Total tabel user ".check_count_user($db):"TABLE USER NO EXIST";
-
         //mengatur data agar hanya di tampilkan 4 baris
         $page = $_GET["page"]??0;
 
-        //memanggil fungsi tabel_user()
-        $result = tabel_user($db,$page);
-
-        //menampilkan data di body tabel
-        $html = "";
-        foreach($result as $results){
-            $html.= "<tr>       
-                        <th>".$results['nomor']."</th>
-                        <td>".$results['email']."</td>
-                        <td>".$results['nama']."</td>
-                        <td>
-                            <a class='btn btn-warning' href='form.php?page=edit&id=".$results['id_user']."&db=user'><span class='fa-solid fa-pencil'></span></a>
-                            <a class='btn btn-danger' href='form.php?page=delete&id=".$results['id_user']."&db=user'><span class='fa-solid fa-trash'></span></a>
-                            <a class='btn btn-success' href='profil.php?id=".$results['id_user']."&db=user'><span class='fa-solid fa-circle-info'></span></a>
-
-                        </td>
-                    </tr>";
-        }
-
-        //membuat tombol next $ prev
-        if(!$page){
-            $prev = "<a class='btn btn-primary disabled me-2' href='user.php?page=".($page-1)."&db=user'> <span class='fa-solid fa-chevron-left'></span> </a>";
-        }else{
-            $prev = "<a class='btn btn-primary me-2' href='user.php?page=".($page-1)."&db=user'> <span class='fa-solid fa-chevron-left'></span> </a>";
-        }
-
-        $count = check_count_user($db);
-        if(count($result)>=4 && (count($result)*($page+1))!=$count){
-            $next = "<a class='btn btn-primary' href='user.php?page=".($page+1)."&db=user'> <span class='fa-solid fa-chevron-right'></span> </a>";
-        }else{
-            $next = "<a class='btn btn-primary disabled' href='user.php?page=".($page+1)."&db=user'> <span class='fa-solid fa-chevron-right'></span> </a>";
-        }
+        //Memanggil class User dr filw controller.php
+        $user = new User($db,$page);
+        $new = $user->new();
+        $tabels = $user->tabel();
+        $count = $user->count();
+        $header = $user->header();
+        $list = $user->list();
+        $prev = $user->prev();
+        $next = $user->next();
 
         //nyambungin file dashboard.php ke file login.php
         include "../template/tabel.php";
-
 
 
     }else{ 
         //perintah untuk redirect
         header("Location: ../index.php");
     }
-
-
-
 ?>

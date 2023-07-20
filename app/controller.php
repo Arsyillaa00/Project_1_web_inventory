@@ -61,7 +61,7 @@ function database(){
     return $conn;
 }
 
-//===== fungsi untuk check tabel user ada isinya atau tidak ===== 
+/*===== fungsi untuk check tabel user ada isinya atau tidak ===== 
 function check_tabel_user($mysql){
     //perintah utk check tabel
     $query = "SHOW TABLES LIKE 'user'";
@@ -93,7 +93,7 @@ function check_tabel_user($mysql){
             }
         }
     }
-}
+}*/
 
 //===== membuat fungsi untuk login ===== 
 function login($mysql, $email, $password){
@@ -175,14 +175,14 @@ function check_tabel_products($mysql){
     }
 }
 
-//fungsi utk check total data user yg ada di tabel
+/*fungsi utk check total data user yg ada di tabel
 function check_count_user($mysql){
     $query = "SELECT * FROM user";
     $result = $mysql->query($query)->num_rows;
 
     return $result;
 
-}
+}*/
 
 //fungsi utk check total data status yg ada di tabel
 function check_count_status($mysql){
@@ -192,16 +192,16 @@ function check_count_status($mysql){
     return $result;
 }
 
-//fungsi utk check total data products yg ada di tabel
+/*fungsi utk check total data products yg ada di tabel
 function check_count_products($mysql){
-    $query = "SELECT COUNT(*), date_m FROM products ORDER BY date_m DESC LIMIT 1"; /*ASC = urutan dr kecil ke besar, DESC = urutan dr besar ke kecil */
+    $query = "SELECT COUNT(*), date_m FROM products ORDER BY date_m DESC LIMIT 1"; /*ASC = urutan dr kecil ke besar, DESC = urutan dr besar ke kecil 
     $result = $mysql->query($query)->fetch_row();
     $time = date("d-m-Y",$result[1]);
 
     return "total tabel products: ".$result[0]." terakhir update ".$time;
-}
+}*/
 
-//fungsi untuk mengambil data di MYSQL, kemudian akan ditampilkan di file user.php
+/*fungsi untuk mengambil data di MYSQL, kemudian akan ditampilkan di file user.php
 function tabel_user($mysql, $page){
     $limit = 4*$page;
     $query = "SELECT (@no:=@no+1) AS nomor, id_user, email, nama FROM user, (SELECT @no:=$limit) AS number ORDER BY id_user LIMIT $limit,4";
@@ -209,9 +209,9 @@ function tabel_user($mysql, $page){
 
     return $result;
 
-}
+}*/
 
-//fungsi untuk menambahkan data user
+/*fungsi untuk menambahkan data user
 function insert_user($mysql,$post){
     $nama = $mysql->real_escape_string($post['nama']);
     $email = $mysql->real_escape_string($post['email']);
@@ -239,9 +239,9 @@ function insert_user($mysql,$post){
     //$name = mysqli_real_escape_string($mysql, $name);
     //$name = $mysql->real_escape_string($name);
      
-}
+}*/
 
-//fungsi untuk hapus data
+/*fungsi untuk hapus data
 function delete_user($mysql,$id_user){
     $id = $mysql->real_escape_string($id_user);
 
@@ -252,7 +252,7 @@ function delete_user($mysql,$id_user){
         $mysql->query("DELETE FROM user WHERE id_user='$id' ");
         return $mysql->affected_rows;
     }
-}
+}*/
 
 //fungsi untuk fitur profil
 function detail_user($mysql,$id_user){
@@ -519,6 +519,17 @@ class Konsumen{
         return $result;
     }
 
+    function count(){
+        //memanggil variabel public
+        $mysql = $this->mysql;
+
+        $query = "SELECT COUNT(id_products) FROM products";
+        $result = $mysql->query($query)->fetch_row();
+        
+
+        return $result[0];
+    }
+
     function prev(){
         $page = $this->page;
         $prev = "";
@@ -546,6 +557,7 @@ class Konsumen{
         $count = $this->count();
         $page = $this->page;
         $next = "";
+        $url = array();
         $url['page'] = $page+1;
 
         //membuat tombol next saat mencari berdasarkan karakter
@@ -565,13 +577,240 @@ class Konsumen{
         return $next;
     }
 
-    function count(){
-        $mysql = $this->mysql;
-        $query = "SELECT COUNT(id_products) FROM products"; /*ASC = urutan dr kecil ke besar, DESC = urutan dr besar ke kecil */
-        $result = $mysql->query($query)->fetch_row();
-        
+}
 
-        return $result[0];
+class User{
+    const LIMIT = 12;
+    const DB = "user";
+    public $mysql;
+    public $page;
+    public $array;
+    public $input;
+
+    function __construct($mysql, $page){
+        $this->mysql=$mysql;
+        $this->page=$page;
+        //echo "test construct";
+
+        //jika session tersimpan, perintah dibawah akan dijalankan
+        login_status();
+    }
+
+    function __destruct(){
+        //echo "test destruct";
+    }
+
+    function new(){
+        return  "<a class='btn btn-primary' href='form.php?page=create&db=user'>
+                    <span class='fa-solid fa-plus'></span>    
+                    Tambah Data
+                </a>";
+    }
+
+    function insert($post){
+        //memanggil variabel public
+        $mysql = $this->mysql;
+
+        $nama = $mysql->real_escape_string($post['nama']);
+        $email = $mysql->real_escape_string($post['email']);
+        $password = $mysql->real_escape_string($post['password']);
+        $password2 = $mysql->real_escape_string($post['password2']);
+
+
+        //untuk konfirmasi ulang pass, jika nilai berbeda data tdk bisa diinput
+        if($password == $password2){
+
+            //cek email sudah digunakan atau belum
+            $check = $mysql->query("SELECT id_user FROM user WHERE nama='$nama' AND email='$email'")->num_rows;
+
+            if($check){
+                return 0;
+            }else{
+                $mysql->query("INSERT INTO user(nama,email,password) VALUES ('$nama','$email','$password')");
+                return $mysql->affected_rows;
+            }
+        }else{
+            return 0;
+        }
+    }
+
+    static function form(){
+        return  "<div class='input-group mb-3'>
+                        <label class='input-group-text' for='nama'><i class='fa-solid fa-user'></i></label>
+                        <input class='form-control' type='text' id='nama' name='nama' placeholder='masukkan nama lengkap' required>
+                </div>
+                <div class='input-group mb-3'>
+                        <label class='input-group-text' for='email'><i class='fa-solid fa-envelope'></i></label>
+                        <input class='form-control' type='email' id='email' name='email' placeholder='xxx@gmail.com' required>
+                </div>
+                <div class='input-group mb-3'>
+                        <label class='input-group-text' for='password'><i class='fa-solid fa-lock'></i></label>
+                        <input class='form-control' type='password' id='password' name='password' placeholder='masukkan password 8 karakter' required>
+                </div>
+                <div class='input-group mb-3'>
+                        <label class='input-group-text' for='password2'><i class='fa-solid fa-lock'></i></label>
+                        <input class='form-control' type='password' id='password2' name='password2' placeholder='masukkan ulang password' required>
+                </div>";
+    }
+
+    function tabel(){
+        //memanggil variabel public
+        $mysql = $this->mysql;
+        $count = $this->count();
+
+        //perintah utk check tabel
+        $query = "SHOW TABLES LIKE 'user'";
+        $result = $mysql->query($query)->num_rows;
+        //check $result berhasil/tdk
+        //print json_encode($result);
+
+        if($result){
+            return "TOTAL TABEL ".$count;
+            
+        }else{
+            $create = "CREATE TABLE user (
+                id_user INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                nama VARCHAR(60) NOT NULL,
+                email VARCHAR(60) NOT NULL,
+                password VARCHAR(60) NOT NULL,
+                status INT(1)
+                )";
+
+            //perintah untuk membuat tabel di database
+            if($mysql->query($create) != false){
+                $demo = "INSERT INTO user (nama,email,password) VALUES ('admin','admin@gmail.com','admin123')";
+
+                //perintah untuk check insert user telah berhsl/tdk
+                if($mysql->query($demo) != false){
+                    return "TOTAL TABEL".$count;
+                }else{
+                    return "TABEL USER NO EXIST";
+                }
+            }
+            
+
+        }
+    }
+
+    function count(){
+        //memanggil variabel public
+        $mysql = $this->mysql;
+
+        $query = "SELECT * FROM user";
+        $result = $mysql->query($query)->num_rows;
+
+        return $result;
+    }
+
+    function header(){
+        return  "<tr>
+                    <th>Nomor</th>
+                    <th>Email</th>
+                    <th>Nama</th>
+                    <th>Menu</th>
+                </tr>";
+    }
+
+    function list(){
+        //memanggil variabel public
+        $page = $this->page;
+        $mysql = $this->mysql;
+
+        $limit = self::LIMIT*$page;
+        $number = self::LIMIT;
+        $query = "SELECT (@no:=@no+1) AS nomor, id_user, email, nama FROM user, (SELECT @no:=$limit) AS number ORDER BY id_user LIMIT $limit,$number";
+        $result = $mysql->query($query);
+
+        $this->array = $result->num_rows;
+        return  $this->view($result->fetch_all(MYSQLI_ASSOC));
+    }
+
+    function view($array){
+        $list_products = "";
+        foreach($array as $key){
+            $list_products.= "<tr>       
+                        <th>".$key['nomor']."</th>
+                        <td>".$key['email']."</td>
+                        <td>".$key['nama']."</td>
+                        <td>
+                            <a class='btn btn-warning' href='form.php?page=edit&id=".$key['id_user']."&db=user'><span class='fa-solid fa-pencil'></span></a>
+                            <a class='btn btn-danger' href='form.php?page=delete&id=".$key['id_user']."&db=user'><span class='fa-solid fa-trash'></span></a>
+                            <a class='btn btn-success' href='profil.php?id=".$key['id_user']."&db=user'><span class='fa-solid fa-circle-info'></span></a>
+
+                        </td>
+                    </tr>";
+        }
+        return $list_products;
+    }
+
+    function delete($id_user){
+        //memanggil variabel public
+        $mysql = $this->mysql;
+
+        $id = $mysql->real_escape_string($id_user);
+
+        //perulangan untuk mencegah hapus id/akun yg digunakan untuk login
+        if($id == $_SESSION['id_user']){
+            return 0;
+        }else{
+            $mysql->query("DELETE FROM user WHERE id_user='$id' ");
+            return $mysql->affected_rows;
+        }
+    }
+
+    function prev(){
+        //memanggil variabel public
+        $page = $this->page;
+
+        $prev = "";
+        $url = array();
+        $url['db'] = "user";
+        $url['page'] = $page-1;
+
+        //membuat tombol prev saat mencari berdasarkan karakter
+        if($this->input){
+            $url['search'] = $this->input;
+        }
+
+        $search = "?".http_build_query($url);
+
+        //membuat tombol prev
+        if(!$page){
+            $prev = "<a class='btn btn-primary disabled me-2' href='".$search."'> <span class='fa-solid fa-chevron-left'></span> </a>";
+        }else{
+            $prev = "<a class='btn btn-primary me-2' href='".$search."'> <span class='fa-solid fa-chevron-left'></span> </a>";
+        }
+
+        return $prev;
+    }
+
+    function next(){
+        //memanggil function dalam class
+        $count = $this->count();
+
+        //memanggil variabel public
+        $page = $this->page;
+
+        $next = "";
+        $url = array();
+        $url['db'] = "user";
+        $url['page'] = $page+1;
+
+        //membuat tombol next saat mencari berdasarkan karakter
+        if($this->input){
+            $url['search'] = $this->input;
+        }
+
+        $search = "?".http_build_query($url);
+
+        //membuat tombol next 
+        if($this->array >= self::LIMIT && ($this->array*($page+1))!=$count){
+            $next = "<a class='btn btn-primary' href='".$search."'> <span class='fa-solid fa-chevron-right'></span> </a>";
+        }else{
+            $next = "<a class='btn btn-primary disabled' href='".$search."'> <span class='fa-solid fa-chevron-right'></span> </a>";
+        }
+
+        return $next;
     }
 
 }

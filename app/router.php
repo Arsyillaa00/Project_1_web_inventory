@@ -14,7 +14,7 @@ function no_database(){
 
 }
 
-// function login
+// function login, nampilin side bar
 function login_status(){
     
     include "../template/sidebar.php";
