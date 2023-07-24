@@ -33,10 +33,11 @@
     $id = $_GET['id']??0;
     //mengecheck session user
     if($id){
-        $form_name = $_GET['db']??"";
+        $form_name = User::DB;
         switch($form_name){
             case 'user':
-                $profil = detail_user($db,$id);
+                $query = new User($db,0);
+                $profil = $query->detail($id);
                 $nama = $profil['nama'];
                 $email = $profil['email'];
                 $status = get_status($db,$profil['status'])['title']??'';

@@ -33,55 +33,15 @@
 
     //mengecheck session user
     if(isset($_SESSION['id_user'])){
-        //jika session tersimpan, perintah dibawah akan dijalankan
-        login_status($_SESSION);
         
         $page = $_GET["page"]??"";
 
         switch($page){
             case "create":
-                $form = User::DB;
-                $input = "";
+                $form = new Form($_GET['db']);
+                $input = $form->create();
 
-                switch($form){
-                    case 'user':
-                        $input = User::form();
-                    break;
-
-                    case 'status':
-                        $input = "  <div class='input-group mb-3'>
-                                        <label class='input-group-text' for='title'><i class='fa-solid fa-user'></i></label>
-                                        <input class='form-control' id='title' type='text' name='title' placeholder='masukkan nama status' required>
-                                    </div>
-                                ";
-                    break;
-
-                    case 'products':
-                        $input = "  <div class='input-group mb-3'>
-                                        <label class='input-group-text' for='nama_products'><i class='fa-solid fa-tag'></i></label>
-                                        <input class='form-control' id='nama_products' type='text' name='nama_products' placeholder='masukkan nama product' required>
-                                    </div>
-                                    <div class='input-group mb-3'>
-                                        <label class='input-group-text' for='harga'><i class='fa-solid fa-dollar-sign'></i></label>
-                                        <input class='form-control' id='harga' type='text' name='harga' placeholder='0' required>
-                                    </div>
-                                    <div class='input-group mb-3'>
-                                        <label class='input-group-text' for='total'><i class='fa-sharp fa-solid fa-box'></i></label>
-                                        <input class='form-control' id='total' type='text' name='total' placeholder='0' required>
-                                    </div>
-                                ";
-                    break;
-
-                    default :
-                        //perintah untuk redirect
-                        header("Location: ../index.php");
-                    break;
-                }
-
-
-
-                //memanggil file form_input.php
-                include "../template/form_input.php";
+                print $input;
             break;
 
             case "insert":
@@ -90,38 +50,8 @@
                 if(empty($post)){
                     header("Location: ../index.php");
                 }else{
-                    $form_name = User::DB;
-                    $query = "";
-                    $result = "";
-                    switch($form_name){
-                        case "user":
-                            $query = new User($db,0);
-                            $result = $query->insert($post);
-                        break;
-
-                        case "status":
-                            $result = insert_status($db,$post);
-                        break;
-
-                        case "products":
-                            $result = insert_products($db,$post);
-                        break;
-
-                        default:
-                        break;
-                    }
-
-                    if($result){
-                        //perintah untuk redirect
-                        header("Location: ".$form_name.".php?db=".$form_name);
-
-                    }else{
-                        //notifikasi saat data yg di input sama
-                        print "<script>alert('nama atau email sudah digunakan!')</script>";
-
-                        //memanggil file form_input.php
-                        include "../template/form_input.php";
-                    }
+                    $form = new Form($_GET['db']);
+                    $form->insert($db,$post);
                 }
             break;
 
@@ -129,34 +59,8 @@
                 $id = $_GET['id']??"";
 
                 if($id){
-                    $form_name = User::DB;
-                    $query = "";
-                    $result = "";
-                    switch($form_name){
-                        case 'user':
-                            $query = new User($db,0);
-                            $result = $query->delete($id);
-                        break;
-                        
-                        case "status":
-                            $result = delete_status($db,$id);
-                        break;
-
-                        case "products":
-                            $result = delete_products($db,$id);
-                        break;
-
-                        default:
-                        break;
-                    }
-                    
-                    if($result){
-                        //notifikasi saat data yg di input sama
-                        print "<script>alert('data berhasil dihapus!')</script>";
-                    }else{
-                        //notifikasi saat data yg di input sama
-                        print "<script>alert('data gagal dihapus!')</script>";
-                    }
+                    $form = new Form($_GET['db']);
+                    $form->delete($db,$id);
 
                 }else{
                     //notifikasi saat data yg di input sama
@@ -170,61 +74,10 @@
 
             case 'edit':
                 $id = $_GET['id']??"";
-                $result = "";
-                $form_name = $_GET['db']??"";
 
                 if($id){
-                    switch($form_name){
-                        case "user":
-                            $result = detail_user($db,$id);
-
-                            if(empty($result)){
-                                //notifikasi saat data yg di input kosong
-                                print "<script>alert('id user tidak ada!')</script>";
-                            }else{
-                                $nama = $result['nama'];
-                                $email = $result['email'];
-                                $status = $result['status'];
-
-                                include '../template/form_edit.php';
-                            }
-                        break;
-
-                        case "status":
-                            $result = detail_status($db,$id);
-
-                            if(empty($result)){
-                                //notifikasi saat data yg di input kosong
-                                print "<script>alert('id user tidak ada!')</script>";
-                            }else{
-                                $title = $result['title'];
-                                $level = $result['level'];
-
-                                include '../template/form_edit.php';
-                            }
-                        break;
-
-                        case "products":
-                            $result = detail_products($db,$id);
-
-                            if(empty($result)){
-                                //notifikasi saat data yg di input kosong
-                                print "<script>alert('id user tidak ada!')</script>";
-                            }else{
-                                $nama_products = $result['nama_products'];
-                                $harga = $result['harga'];
-                                $total = $result['total'];
-                                $status = $result['status'];
-
-                                include '../template/form_edit.php';
-                            }
-                        break;
-
-                        default:
-
-                        break;
-                        
-                    }
+                    $form = new Form($_GET['db']);
+                    $form->edit($db,$id);
                 }else{
                     //notifikasi saat data yg di input sama
                     print "<script>alert('id user tidak ada!')</script>";
@@ -235,18 +88,21 @@
                 $post = $_POST??[];
                 $post['id']=$_GET['id'];
                 
-                $form_name = $_GET['db']??"";
+                $form_name = User::DB;
                 switch($form_name){
                     case "user":
-                        $result = update_user($db,$post);
+                        $query = new User($db,0);
+                        $result = $query->update($post);
                     break;
 
                     case "status":
-                        $result = update_status($db,$post);
+                        $query = new Status($db,0);
+                        $result = $query->update($post);
                     break;
 
                     case "products":
-                        $result = update_products($db,$post);
+                        $query = new Products($db,0);
+                        $result = $query->update($post);
                     break;
 
                     default:

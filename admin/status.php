@@ -32,51 +32,19 @@
 
     //mengecheck session user
     if(isset($_SESSION['id_user'])){
-        //jika session tersimpan, perintah dibawah akan dijalankan
-        login_status($_SESSION);
         
-        //check tabel status ada/tdk
-        $status = check_count_status($db);
-        $count_data = $status?"Total tabel status ".check_count_status($db):"TABLE STATUS NO EXIST";
-
         //mengatur data agar hanya di tampilkan 4 baris
         $page = $_GET["page"]??0;
 
-        //memanggil fungsi tabel_status()
-        $result = tabel_status($db, $page);
-
-        //menampilkan data di body tabel
-        $html = "";
-        foreach($result as $results){
-            $html.= "<tr>       
-                        <td>".$results['nomor']."</td>
-                        <td>".$results['title']."</td>
-                        <td>".$results['level']."</td>
-                        <td>
-                            <a class='btn btn-warning' href='form.php?page=edit&id=".$results['id_status']."&db=status'><span class='fa-solid fa-pencil'></span></a>
-                            <a class='btn btn-danger' href='form.php?page=delete&id=".$results['id_status']."&db=status'><span class='fa-solid fa-trash'></span></a>
-                            <a class='btn btn-success' href='profil.php?id=".$results['id_status']."&db=status'><span class='fa-solid fa-circle-info'></span></a>
-
-                        </td>
-                    </tr>";
-        }
-
-        //membuat tombol next $ prev
-        $database = $_GET['db']??"";
-
-        if(!$page){
-            $prev = "<a class='btn btn-primary disabled me-2' href='status.php?page=".($page-1)."&db=status'> <span class='fa-solid fa-chevron-left'></span> </a>";
-        }else{
-            $prev = "<a class='btn btn-primary me-2' href='status.php?page=".($page-1)."&db=status'> <span class='fa-solid fa-chevron-left'></span> </a>";
-        }
-
-        $count = check_count_status($db);
-        if(count($result)>=4 && (count($result)*($page+1))!=$count){
-            $next = "<a class='btn btn-primary' href='status.php?page=".($page+1)."&db=status'> <span class='fa-solid fa-chevron-right'></span> </a>";
-        }else{
-            $next = "<a class='btn btn-primary disabled' href='status.php?page=".($page+1)."&db=status'> <span class='fa-solid fa-chevron-right'></span> </a>";
-
-        }
+        //Memanggil class User dr filw controller.php
+        $status = new Status($db,$page);
+        $new = $status->new();
+        $tabels = $status->tabel();
+        $count = $status->count();
+        $header = $status->header();
+        $list = $status->list();
+        $prev = $status->prev();
+        $next = $status->next();
 
         //nyambungin file dashboard.php ke file login.php
         include "../template/tabel.php";

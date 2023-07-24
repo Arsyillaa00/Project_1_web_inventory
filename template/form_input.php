@@ -2,9 +2,9 @@
     <section class="countainer">
         <div class="row">
             <div class="col-12">
-                <form class="card" action="?page=insert&db=<?php echo $form;?>" method="POST" >
+                <form class="card" action="?page=insert&db=<?php echo $form->db;?>" method="POST" >
                     <div class="card-header">
-                        <h3>Form Input <span class="text-danger text-uppercase"><?php echo $form; ?></span></h3>
+                        <h3>Form Input <span class="text-danger text-uppercase"><?php echo $form->db; ?></span></h3>
                     </div>
                     <div class="card-body">
                         <?php echo $input;?>  

@@ -1,3 +1,75 @@
+### v.1.000.013
+-----
+##### DEPRECATED
+- detail_user($mysql,$id_user)
+- update_user($mysql,$profil)
+- check_tabel_products($mysql)
+- check_count_products($mysql)
+- tabel_products($mysql, $page)
+- detail_products($mysql,$id_products)
+- insert_products($mysql,$post)
+- update_products($mysql,$post)
+- delete_products($mysql,$id_products)
+- check_tabel_status($mysql)
+- check_count_status($mysql)
+- list_status($mysql)
+- tabel_status($mysql, $page)
+- insert_status($mysql,$post)
+- detail_status($mysql,$id_status)
+- update_status($mysql,$profil)
+- delete_status($mysql,$id_status)
+
+##### NEW
+- class Products
+- class Status
+- class Form
+
+##### class Products
+fungsi untuk memanggil class Products
+- $db adalah nama database
+- $page adalah nama untuk halaman yang akan menampilkan products
+```php
+require_once "app/controller.php";
+$products = new Products($db,$page); //memanggil new class
+$new = $products->new(); //tombol untuk menambah data 
+$tabels = $products->tabel(); //untuk cek eksistensi tabel user
+$count = $products->count(); //untuk menampilkan jumlah data
+$header = $products->header(); //untuk menampilkan header tabel
+$list = $products->list(); //untuk menampilkan list data dari tabel user
+$prev = $products->prev(); //menampilkan tombol prev
+$next = $products->next(); //menampilkan tombol next
+```
+
+##### class Status
+fungsi untuk memanggil class Status
+- $db adalah nama database
+- $page adalah nama untuk halaman yang akan menampilkan status
+```php
+require_once "app/controller.php";
+$status = new Status($db,$page); //memanggil new class
+$new = $status->new(); //tombol untuk menambah data
+$tabels = $status->tabel(); //untuk cek eksistensi tabel user
+$count = $status->count(); //untuk menampilkan jumlah data
+$header = $status->header(); //untuk menampilkan header tabel
+$list = $status->list(); //untuk menampilkan list data dari tabel user
+$prev = $status->prev(); //menampilkan tombol prev
+$next = $status->next(); //menampilkan tombol next
+```
+
+##### class Form
+fungsi untuk memanggil class Status
+- $db adalah nama database
+- $page adalah nama untuk halaman yang akan menampilkan status
+```php
+require_once "app/controller.php";
+$form = new Form($_GET['db']); //memanggil new class
+$input = $form->create(); //menampilkan form untuk input data baru
+$form->insert($db,$post); //untuk menambah data baru
+$form->delete($db,$id); //untuk menghapus data
+$form->edit($db,$id); //menampilkan form untuk merubah data
+$result = $query->update($post); //untuk merubah data
+```
+
 ### v.1.000.012
 -----
 ##### DEPRECATED

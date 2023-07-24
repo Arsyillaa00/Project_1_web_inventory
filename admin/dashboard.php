@@ -37,29 +37,29 @@
         login_status($_SESSION);
         
         //check tabel user ada/tdk
-        $user = check_tabel_user($db);
-        $count_user = $user?"Total tabel user ".check_count_user($db):"TABLE USER NO EXIST";
+        //$user = check_tabel_user($db);
+        //$count_user = $user?"Total tabel user ".check_count_user($db):"TABLE USER NO EXIST";
 
         //check tabel status ada/tdk
-        $status = check_tabel_status($db);
-        $count_status = $status?"Total tabel status ".check_count_status($db):"TABLE STATUS NO EXIST";
+        //$status = check_tabel_status($db);
+        //$count_status = $status?"Total tabel status ".check_count_status($db):"TABLE STATUS NO EXIST";
 
         //check tabel products ada/tdk
-        $products = check_tabel_products($db);
-        $count_products = $products?"Total tabel products ".check_count_products($db):"TABLE PRODUCTS NO EXIST";
+        //$products = check_tabel_products($db);
+        //$count_products = $products?"Total tabel products ".check_count_products($db):"TABLE PRODUCTS NO EXIST";
 
         include "../template/dashboard.php";
 
     }else{ 
         //jika session masih null/kosong, maka akan mengecek tabel user dan menampilkan form login
         if($db){
-            $user = check_tabel_user($db);
+            //$user = check_tabel_user($db);
 
-            if($user){
+            //if($user){
                 
                 //nyambungin file dashboard.php ke file login.php
                 include "../template/login.php";
-            }
+            //}
         }
     }
 

@@ -4,7 +4,6 @@
 
     switch($form_edit){
         case 'user':
-            $list_status = list_status($db);
             $input_status = "";
             foreach($list_status as $key){
                 $input_status.="<option value='".$key['id_status']."' ".($key['id_status']==$status?'selected':'')."> ".$key['title']." </option>";
