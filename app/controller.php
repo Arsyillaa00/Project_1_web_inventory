@@ -99,7 +99,6 @@ function update_session($profil){
     }
 }
 
-
 //fungsi untuk nilai di bagian status
 function get_status($mysql,$id_status){
     $id = $mysql->real_escape_string($id_status);
@@ -110,6 +109,45 @@ function get_status($mysql,$id_status){
     return $result;
 }
 
+class Home{
+    public $mysql;
+    public $result;
+    public $home;
+
+
+    function __construct($mysql){
+        //jika session tersimpan, perintah dibawah akan dijalankan
+        login_status();
+
+        $this->result = $mysql->query("SELECT TABLE_NAME AS name,TABLE_ROWS AS count FROM information_schema.tables WHERE table_schema = 'project_2';")->fetch_all(MYSQLI_ASSOC);
+        //echo "test construct";
+    }
+
+    function view(){
+        $html = "";
+
+        foreach($this->result AS $key){
+            $html .=    "<div class='col-4'>
+                            <a class='card text-decoration-none' href='".$key['name'].".php'>
+                                <div class='card-header'>
+                                    <div class='fw-bold'>
+                                        ".$key['name']."
+                                    </div>
+                                </div>
+                                <div class='card-body d-flex justify-content-between'>
+                                    <div class=''> Total </div>
+                                    <div class=''>
+                                        ".$key['count']."
+                                    </div>
+                                </div>
+                            </a>
+                        </div>";
+        }
+        return $html;
+        //echo "test destruct";
+    }
+
+}
 
 //class untuk menampilkan product yg aktif
 class Konsumen{
@@ -576,7 +614,7 @@ class Products{
         return $result;
     }
 
-    function update($profil){
+    function update($post){
         //memanggil variabel public
         $mysql = $this->mysql;
         
@@ -692,19 +730,15 @@ class Products{
         return $list_products;
     }
 
-    function delete($id_producst){
+    function delete($id_products){
         //memanggil variabel public
         $mysql = $this->mysql;
 
         $id = $mysql->real_escape_string($id_products);
 
-        //perulangan untuk mencegah hapus id/akun yg digunakan untuk login
-        if($id == $_SESSION['id_products']){
-            return 0;
-        }else{
-            $mysql->query("DELETE FROM products WHERE id_products='$id' ");
-            return $mysql->affected_rows;
-        }
+        $mysql->query("DELETE FROM products WHERE id_products='$id' ");
+        return $mysql->affected_rows;
+        
     }
 
     function prev(){
@@ -1007,22 +1041,37 @@ class Status{
 
 }
 
+/**
+* class form adalah action dari create, delete, dan update
+*/ 
 class Form{
     public $db;
 
+    /**
+     * Create class form 
+     * 
+     * @param string $db ($db adalah nama tabel)
+     * 
+     * @return $this->db = $db
+     */
     function __construct($db){
         $this->db=$db;
         //echo "test construct";
-
-        //jika session tersimpan, perintah dibawah akan dijalankan
-        login_status();
     }
 
     function __destruct(){
         //echo "test destruct";
     }
 
+    /**
+     * function create untuk menampilkan form input
+     * 
+     * @return string form input
+     */
     function create(){
+        //jika session tersimpan, perintah dibawah akan dijalankan
+        login_status();
+
         //memanggil variabel public
         $db = $this->db;
         $input = "";
@@ -1064,6 +1113,15 @@ class Form{
 
     }
 
+    /**
+     * function insert untuk menyimpan data
+     * 
+     * @param MYSQL $mysql
+     * @param object $post
+     * 
+     * @return MYSQL AFFECTED ROWS
+     * 
+     */
     function insert($mysql,$post){
         $db = $this->db;
         $query = "";
@@ -1102,6 +1160,14 @@ class Form{
 
     }
 
+    /**
+     * function delete untuk menghapus data
+     * 
+     * @param MYSQL $mysql
+     * @param string $id
+     * 
+     * @return MYSQL AFFECTED ROWS
+     */
     function delete($mysql,$id){
         $db = $this->db;
         $query = "";
@@ -1118,8 +1184,8 @@ class Form{
             break;
 
             case "products":
-                $query = new Status($mysql,0);
-                $result = $query->products($id);
+                $query = new Products($mysql,0);
+                $result = $query->delete($id);
             break;
 
             default:
@@ -1127,14 +1193,22 @@ class Form{
         }
         
         if($result){
-            //notifikasi saat data yg di input sama
+            //notifikasi saat data berhasil dihapus
             print "<script>alert('data berhasil dihapus!')</script>";
         }else{
-            //notifikasi saat data yg di input sama
+            //notifikasi saat data gagal dihapus
             print "<script>alert('data gagal dihapus!')</script>";
         }
     }
 
+    /**
+     * function edit untuk mengubah data
+     * 
+     * @param MYSQL $mysql
+     * @param string $id
+     * 
+     * @return form edit
+     */
     function edit($mysql,$id){
         $db = $this->db;
         $query = "";

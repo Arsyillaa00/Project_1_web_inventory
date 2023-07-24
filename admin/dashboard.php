@@ -16,13 +16,11 @@
 
 <?php
 
-
     //nyambungin file dashboard.php ke file controller.php
     require_once "../app/controller.php";
     
     //koneksi ke router php
     require_once "../app/router.php"; 
-
 
     //nyambungin file dashboard.php ke file login.php
     //include "../template/login.php";
@@ -33,36 +31,23 @@
 
     //mengecheck session user
     if(isset($_SESSION['id_user'])){
-        //jika session tersimpan, perintah dibawah akan dijalankan
-        login_status($_SESSION);
+
+        $home = new Home($db);
         
-        //check tabel user ada/tdk
-        //$user = check_tabel_user($db);
-        //$count_user = $user?"Total tabel user ".check_count_user($db):"TABLE USER NO EXIST";
 
-        //check tabel status ada/tdk
-        //$status = check_tabel_status($db);
-        //$count_status = $status?"Total tabel status ".check_count_status($db):"TABLE STATUS NO EXIST";
-
-        //check tabel products ada/tdk
-        //$products = check_tabel_products($db);
-        //$count_products = $products?"Total tabel products ".check_count_products($db):"TABLE PRODUCTS NO EXIST";
-
-        include "../template/dashboard.php";
+        print   "<main class='col-10 p-3'>
+                    <section class='countainer'>
+                        <div class='row'>
+                            ".$home->view()."
+                        </div>
+                    </section>
+                </main>";
 
     }else{ 
         //jika session masih null/kosong, maka akan mengecek tabel user dan menampilkan form login
         if($db){
-            //$user = check_tabel_user($db);
-
-            //if($user){
-                
-                //nyambungin file dashboard.php ke file login.php
-                include "../template/login.php";
-            //}
+            include "../template/login.php";
         }
     }
-
-
 
 ?>

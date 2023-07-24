@@ -23,17 +23,12 @@
     //koneksi ke router php
     require_once "../app/router.php"; 
 
-
-    //nyambungin file dashboard.php ke file login.php
-    //include "../template/login.php";
-
     //panggil function mysql 
     $db = database();
     session_start();
 
     //mengecheck session user
     if(isset($_SESSION['id_user'])){
-
 
         //mengatur data agar hanya di tampilkan 4 baris
         $page = $_GET["page"]??0;
@@ -51,13 +46,9 @@
         //nyambungin file dashboard.php ke file login.php
         include "../template/tabel.php";
 
-
-
     }else{ 
         //perintah untuk redirect
         header("Location: ../index.php");
     }
-
-
 
 ?>

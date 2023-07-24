@@ -1,3 +1,24 @@
+### v.1.000.014
+-----
+##### FIXED BUG
+- class Konsumen
+- class User
+- class Products
+- class Status
+- class Form
+
+##### NEW
+- class Home
+
+##### class Home
+fungsi untuk memanggil class Home
+- $db adalah nama database
+```php
+require_once "app/controller.php";
+$home = new Home($db); //memanggil new class
+$home->view(); //menampilkan card nama tabel dan total data
+```
+
 ### v.1.000.013
 -----
 ##### DEPRECATED

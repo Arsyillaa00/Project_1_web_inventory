@@ -16,26 +16,19 @@
 
 <?php
 
-
     //nyambungin file dashboard.php ke file controller.php
     require_once "../app/controller.php";
     
     //koneksi ke router php
     require_once "../app/router.php"; 
 
-
-    //nyambungin file dashboard.php ke file login.php
-    //include "../template/login.php";
-
     //panggil function mysql 
     $db = database();
     session_start();
+    $page = $_GET["page"]??"";
 
     //mengecheck session user
     if(isset($_SESSION['id_user'])){
-        
-        $page = $_GET["page"]??"";
-
         switch($page){
             case "create":
                 $form = new Form($_GET['db']);
@@ -57,18 +50,19 @@
 
             case 'delete':
                 $id = $_GET['id']??"";
+                $redirect = $_GET['db'];
 
                 if($id){
                     $form = new Form($_GET['db']);
-                    $form->delete($db,$id);
-
+                    $form->delete($db,$id);  
+                    
                 }else{
                     //notifikasi saat data yg di input sama
                     print "<script>alert('id user tidak ada!')</script>";
                 }
 
                 //perintah untuk redirect
-                header("Location: ".$form_name.".php?db=".$form_name);
+                header("Location: ".$redirect.".php?db=".$redirect);
 
             break;
 
@@ -79,7 +73,7 @@
                     $form = new Form($_GET['db']);
                     $form->edit($db,$id);
                 }else{
-                    //notifikasi saat data yg di input sama
+                    //notifikasi saat data yg diinput sama
                     print "<script>alert('id user tidak ada!')</script>";
                 }
             break;
@@ -88,8 +82,8 @@
                 $post = $_POST??[];
                 $post['id']=$_GET['id'];
                 
-                $form_name = User::DB;
-                switch($form_name){
+                $redirect = $_GET['db'];
+                switch($redirect){
                     case "user":
                         $query = new User($db,0);
                         $result = $query->update($post);
@@ -104,9 +98,6 @@
                         $query = new Products($db,0);
                         $result = $query->update($post);
                     break;
-
-                    default:
-                    break;
                 }
 
                 if($result){
@@ -118,7 +109,7 @@
                 }
                 
                 //perintah untuk redirect
-                header("Location: ".$form_name.".php?db=".$form_name);
+                header("Location: ".$redirect.".php?db=".$redirect);
 
             break;
 
@@ -127,7 +118,6 @@
                 header("Location: ../index.php");
             break;
         }
-
 
     }else{ 
         //perintah untuk redirect

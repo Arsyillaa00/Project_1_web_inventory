@@ -33,19 +33,21 @@
     $id = $_GET['id']??0;
     //mengecheck session user
     if($id){
-        $form_name = User::DB;
-        switch($form_name){
+        $redirect = $_GET['db']??"";
+        switch($redirect){
             case 'user':
                 $query = new User($db,0);
                 $profil = $query->detail($id);
+
                 $nama = $profil['nama'];
                 $email = $profil['email'];
                 $status = get_status($db,$profil['status'])['title']??'';
             break;
             case 'products':
+                $query = new Products($db,0);
+                $profil = $query->detail($id);
                 $list_status = array("tidak aktif", "aktif");
-
-                $profil = detail_products($db,$id);
+                
                 $nama_products = $profil['nama_products'];
                 $harga = $profil['harga'];
                 $total = $profil['total'];
@@ -54,14 +56,14 @@
                 $date_m = date("Y-m-d", $profil['date_m']);
             break;
             case 'status':
-                $profil = detail_status($db,$id);
+                $query = new Status($db,0);
+                $profil = $query->detail($id);
+
                 $title = $profil['title'];
                 $level = $profil['level'];
             break;
         }
 
-        //jika session tersimpan, perintah dibawah akan dijalankan, dan untuk menampilkan sidebar
-        login_status($_SESSION);
 
         include "../template/profil.php";
 
