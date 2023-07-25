@@ -1,48 +1,3 @@
-<?php 
-
-    /*$tabel = $_GET['db']??"";
-    $head = "";
-
-    switch($tabel){
-        case 'user':
-            $head = "<tr>
-                        <th>Nomor</th>
-                        <th>Email</th>
-                        <th>Nama</th>
-                        <th>Menu</th>
-                    </tr>";
-        break;
-
-        case 'status':
-            $head = "<tr>
-                        <th>Nomor</th>
-                        <th>Title</th>
-                        <th>Level</th>
-                        <th>Menu</th>
-                    </tr>";
-        break;
-
-        case 'products':
-            $head = "<tr>
-                        <th>Nomor</th>
-                        <th>Nama</th>
-                        <th>Harga</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Tanggal Input</th>
-                        <th>Tanggal Update</th>
-                        <th>Menu</th>
-                    </tr>";
-        break;
-
-        default :
-            //perintah untuk redirect
-            header("Location: ../index.php");
-        break;
-    }*/
-
-?>
-
 <main class="col-10 p-3">
     <section class="countainer">
         <div class="row">
@@ -59,17 +14,28 @@
                     <tfoot>
                         <tr>
                             <td class="border-0">
-                                <?php echo $prev.$next; ?>
+                                <div class="input-group">
+                                    <?php echo $prev.$nav.$next.$limit; ?>
+                                </div>
                             </td>
                         </tr>
                     </tfoot>
 
                     <caption>
-                        <div class="d-flex justify-content-between">
-                            <div class="px-2 fw-bold">
-                                <?php echo $tabels; ?>
+                        <div class="px-2 fw-bold mb-3">
+                            <?php echo $tabels; ?>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <form class="input-group col-4" action="<?php echo $url; ?>" method="GET">
+                                    <input type="text" class="form-control" name="search" value="<?php echo $text ?>" placeholder="search">
+                                    <button class="btn btn-primarry"><span class="fa-solid fa-magnifying-glass"></span></button>
+                                </form>
                             </div>
-                            <?php echo $new; ?>
+                            <div class="col-8 text-end">
+                                <?php echo $new; ?>  
+                            </div>
                         </div>
                     </caption>
                 </table>

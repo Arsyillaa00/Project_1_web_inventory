@@ -1,3 +1,25 @@
+### v.1.000.015
+-----
+
+##### NEW
+- function limit
+- function search
+- function url
+- function nav
+
+##### class User
+fungsi untuk memanggil class User
+- $db adalah nama database
+- $string adalah text pencarian
+```php
+require_once "app/controller.php";
+$user = new User($db,0); //memanggil new class
+$user->search($string); //untuk konfigurasi pencarian
+$limit = $user->limit(); //untuk konfigurasi limit row
+$url = $user->url(); //untuk menampilkan url
+$nav = $user->nav(); //untuk menampilkan 3 tombol navigasi
+```
+
 ### v.1.000.014
 -----
 ##### FIXED BUG

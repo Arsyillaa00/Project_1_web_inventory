@@ -16,43 +16,40 @@
 
 <?php
 
-
-    //nyambungin file dashboard.php ke file controller.php
     require_once "../app/controller.php";
-    
-    //koneksi ke router php
+  
     require_once "../app/router.php"; 
 
-
-    //nyambungin file dashboard.php ke file login.php
-    //include "../template/login.php";
-
-    //panggil function mysql 
     $db = database();
     session_start();
 
-    //mengecheck session user
     if(isset($_SESSION['id_user'])){
-        
-        //mengatur data agar hanya di tampilkan 4 baris
         $page = $_GET["page"]??0;
 
-        //Memanggil class User dr filw controller.php
         $user = new User($db,$page);
         $new = $user->new();
         $tabels = $user->tabel();
         $count = $user->count();
         $header = $user->header();
+
+        $text = "";
+        if(isset($_GET['search'])&&$_GET['search']!=NULL){
+            $text = $_GET['search'];
+
+            $user->search($_GET['search']);
+        };
+
+        $url = $user->url();
         $list = $user->list();
         $prev = $user->prev();
         $next = $user->next();
+        $limit = $user->limit();
+        $nav = $user->nav();
 
-        //nyambungin file dashboard.php ke file login.php
         include "../template/tabel.php";
 
-
     }else{ 
-        //perintah untuk redirect
+        
         header("Location: ../index.php");
     }
 ?>

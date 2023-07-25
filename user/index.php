@@ -117,10 +117,6 @@
         <!--Menampilkan Product-->
         <section class="container py-4 mt-5">
             <div class="row">
-                
-                
-                
-
                 <?php
 
                     //koneksi ke file controller

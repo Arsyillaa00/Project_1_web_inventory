@@ -286,24 +286,23 @@ class Konsumen{
 }
 
 class User{
-    const LIMIT = 12;
+    const LIMIT = 5;
     const DB = "user";
     public $mysql;
     public $page;
     public $array;
     public $input;
+    public $search;
 
     function __construct($mysql, $page){
         $this->mysql=$mysql;
         $this->page=$page;
-        //echo "test construct";
-
-        //jika session tersimpan, perintah dibawah akan dijalankan
+        
         login_status();
     }
 
     function __destruct(){
-        //echo "test destruct";
+
     }
 
     function new(){
@@ -314,7 +313,6 @@ class User{
     }
 
     function insert($post){
-        //memanggil variabel public
         $mysql = $this->mysql;
 
         $nama = $mysql->real_escape_string($post['nama']);
@@ -322,11 +320,7 @@ class User{
         $password = $mysql->real_escape_string($post['password']);
         $password2 = $mysql->real_escape_string($post['password2']);
 
-
-        //untuk konfirmasi ulang pass, jika nilai berbeda data tdk bisa diinput
         if($password == $password2){
-
-            //cek email sudah digunakan atau belum
             $check = $mysql->query("SELECT id_user FROM user WHERE nama='$nama' AND email='$email'")->num_rows;
 
             if($check){
@@ -360,7 +354,6 @@ class User{
     }
 
     function detail($id_user){
-        //memanggil variabel public
         $mysql = $this->mysql;
 
         $id = $mysql->real_escape_string($id_user);
@@ -370,7 +363,6 @@ class User{
     }
 
     function update($profil){
-        //memanggil variabel public
         $mysql = $this->mysql;
 
         $id = $mysql->real_escape_string($profil['id']);
@@ -384,15 +376,11 @@ class User{
     }
 
     function tabel(){
-        //memanggil variabel public
         $mysql = $this->mysql;
         $count = $this->count();
 
-        //perintah utk check tabel
         $query = "SHOW TABLES LIKE 'user'";
         $result = $mysql->query($query)->num_rows;
-        //check $result berhasil/tdk
-        //print json_encode($result);
 
         if($result){
             return "TOTAL TABEL ".$count;
@@ -406,11 +394,9 @@ class User{
                 status INT(1)
                 )";
 
-            //perintah untuk membuat tabel di database
             if($mysql->query($create) != false){
                 $demo = "INSERT INTO user (nama,email,password) VALUES ('admin','admin@gmail.com','admin123')";
 
-                //perintah untuk check insert user telah berhsl/tdk
                 if($mysql->query($demo) != false){
                     return "TOTAL TABEL".$count;
                 }else{
@@ -422,11 +408,30 @@ class User{
         }
     }
 
-    function count(){
-        //memanggil variabel public
-        $mysql = $this->mysql;
+    function limit(){
+        $limit = $_GET['limit']??self::LIMIT;
+        $array = array(5,10,15);
+        $result = "";
 
-        $query = "SELECT * FROM user";
+        foreach($array as $key){
+            $result .=  "<li><a class='dropdown-item' href='?limit=".$key."'>".$key." / page</a></li>";
+        }
+
+        return  "<div class='dropdown'>
+                    <button class='btn btn-secondary dropdown-toggle' type='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                        ".$limit." / page
+                    </button>
+                    <ul class='dropdown-menu'>
+                        ".$result."
+                    </ul>
+                </div>";
+    }
+
+    function count(){
+        $mysql = $this->mysql;
+        $search = $this->search;
+
+        $query = "SELECT * FROM user $search";
         $result = $mysql->query($query)->num_rows;
 
         return $result;
@@ -442,13 +447,13 @@ class User{
     }
 
     function list(){
-        //memanggil variabel public
+        $number = $_GET['limit']??self::LIMIT;
         $page = $this->page;
         $mysql = $this->mysql;
+        $search = $this->search;
 
-        $limit = self::LIMIT*$page;
-        $number = self::LIMIT;
-        $query = "SELECT (@no:=@no+1) AS nomor, id_user, email, nama FROM user, (SELECT @no:=$limit) AS number ORDER BY id_user LIMIT $limit,$number";
+        $limit = $number*$page;
+        $query = "SELECT (@no:=@no+1) AS nomor, id_user, email, nama FROM user, (SELECT @no:=$limit) AS number $search ORDER BY id_user LIMIT $limit,$number";
         $result = $mysql->query($query);
 
         $this->array = $result->num_rows;
@@ -474,12 +479,10 @@ class User{
     }
 
     function delete($id_user){
-        //memanggil variabel public
         $mysql = $this->mysql;
 
         $id = $mysql->real_escape_string($id_user);
 
-        //perulangan untuk mencegah hapus id/akun yg digunakan untuk login
         if($id == $_SESSION['id_user']){
             return 0;
         }else{
@@ -488,23 +491,64 @@ class User{
         }
     }
 
+    function search($search){
+        $this->input = $search;
+        $this->search = "WHERE nama LIKE '%$search%'";
+
+    }
+
+    function url(){
+        $url = array();
+        $url['db'] = "user";
+        $url['page'] = 0;
+
+        $search = "user.php?".http_build_query($url);
+
+        return $search;
+    }
+
+    function nav(){
+        $page = $this->page;
+        $count = $this->count();
+        $array = $this->array;
+        $search = $this->input;
+
+        $limit = $_GET['limit']??self::LIMIT;
+        $range = $count/$limit;
+
+        if($range > round($range)){
+            $range = round($range)+1;
+        }
+
+        $nav = "";
+
+        foreach(range($page-1,$page+1) as $key){
+            if(($key+1) > 0 && $key < $range){
+                $class = $key==$page?"btn-primary":"btn-secondary";
+
+                $nav .= "<a class='btn ".$class." me-2' href='user.php?limit=".$limit."&page=".$key."&search=".$search."'> ".($key+1)." </a>";
+            }
+        }
+
+        return $nav;
+    }
+
     function prev(){
-        //memanggil variabel public
         $page = $this->page;
 
+        $limit = $_GET['limit']??self::LIMIT;
         $prev = "";
         $url = array();
         $url['db'] = "user";
         $url['page'] = $page-1;
+        $url['limit'] = $limit;
 
-        //membuat tombol prev saat mencari berdasarkan karakter
         if($this->input){
             $url['search'] = $this->input;
         }
 
         $search = "?".http_build_query($url);
 
-        //membuat tombol prev
         if(!$page){
             $prev = "<a class='btn btn-primary disabled me-2' href='".$search."'> <span class='fa-solid fa-chevron-left'></span> </a>";
         }else{
@@ -515,29 +559,26 @@ class User{
     }
 
     function next(){
-        //memanggil function dalam class
         $count = $this->count();
-
-        //memanggil variabel public
         $page = $this->page;
 
+        $limit = $_GET['limit']??self::LIMIT;
         $next = "";
         $url = array();
         $url['db'] = "user";
         $url['page'] = $page+1;
+        $url['limit'] = $limit;
 
-        //membuat tombol next saat mencari berdasarkan karakter
         if($this->input){
             $url['search'] = $this->input;
         }
 
         $search = "?".http_build_query($url);
 
-        //membuat tombol next 
-        if($this->array >= self::LIMIT && ($this->array*($page+1))!=$count){
-            $next = "<a class='btn btn-primary' href='".$search."'> <span class='fa-solid fa-chevron-right'></span> </a>";
+        if($this->array >= $limit && ($this->array*($page+1))!=$count){
+            $next = "<a class='btn btn-primary me-2' href='".$search."'> <span class='fa-solid fa-chevron-right'></span> </a>";
         }else{
-            $next = "<a class='btn btn-primary disabled' href='".$search."'> <span class='fa-solid fa-chevron-right'></span> </a>";
+            $next = "<a class='btn btn-primary me-2 disabled' href='".$search."'> <span class='fa-solid fa-chevron-right'></span> </a>";
         }
 
         return $next;
