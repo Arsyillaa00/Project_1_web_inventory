@@ -1,3 +1,10 @@
+### v.1.000.016
+-----
+
+##### NEW
+- menampilkan navigasi first dan last page
+- menampilkan column status di tabel user
+
 ### v.1.000.015
 -----
 

@@ -15,7 +15,6 @@
 
 
 <?php
-
     //nyambungin file dashboard.php ke file controller.php
     require_once "../app/controller.php";
     

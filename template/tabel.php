@@ -13,7 +13,7 @@
 
                     <tfoot>
                         <tr>
-                            <td class="border-0">
+                            <td class="border-0" colspan="100%">
                                 <div class="input-group">
                                     <?php echo $prev.$nav.$next.$limit; ?>
                                 </div>

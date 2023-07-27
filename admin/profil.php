@@ -15,17 +15,11 @@
 
 
 <?php
-
-
     //nyambungin file dashboard.php ke file controller.php
     require_once "../app/controller.php";
     
     //koneksi ke router php
     require_once "../app/router.php"; 
-
-
-    //nyambungin file dashboard.php ke file login.php
-    //include "../template/login.php";
 
     //panggil function mysql 
     $db = database();
