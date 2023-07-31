@@ -46,22 +46,6 @@ function create_database($mysql, $db){
 
 }
 
-//===== fungsi untuk check koneksi mysql ke database ===== 
-
-function database(){
-    
-    // Buat koneksi
-    $conn = new mysqli("localhost", "root", "", "project_2");
-
-    // Periksa koneksi
-    if ($conn->connect_error) {
-        die("Koneksi gagal: " . $conn->connect_error);
-    }
-
-    return $conn;
-}
-
-
 //===== membuat fungsi untuk login ===== 
 function login($mysql, $email, $password){
     //perintah SQL Injection
@@ -285,10 +269,36 @@ class Konsumen{
 
 }
 
+class Database{
+    const HOST = "localhost";
+    const USER = "root";
+    const TABEL = "project_2";
+    const PASSWORD = "";
+    public $db;
+
+    /**
+     * Create class form 
+     * 
+     * @param MYSQL $mysql ($mysql adalah koneksi mysql)
+     * @param string|int $page ($page adalah mengatur halaman tabel)
+     * 
+     * @return menampilkan sidebar
+     */
+    function __construct(){
+    $conn = new mysqli(self::HOST, self::USER, self::PASSWORD, self::TABEL);
+
+    if ($conn->connect_error) {
+        die("Koneksi gagal: " . $conn->connect_error);
+    }
+
+    $this->db = $conn;
+}
+}
+
 /**
 * class User adalah mengolah data tabel user
 */ 
-class User{
+class User extends Database{
     const LIMIT = 5;
     const DB = "user";
     public $mysql;
@@ -305,8 +315,8 @@ class User{
      * 
      * @return menampilkan sidebar
      */
-    function __construct($mysql, $page){
-        $this->mysql=$mysql;
+    function __construct($page){
+        parent::__construct();
         $this->page=$page;
         
         login_status();
@@ -335,7 +345,7 @@ class User{
      * @return MYSQL affected_rows
      */
     function insert($post){
-        $mysql = $this->mysql;
+        $mysql = $this->db;
 
         $nama = $mysql->real_escape_string($post['nama']);
         $email = $mysql->real_escape_string($post['email']);
@@ -395,7 +405,7 @@ class User{
      * @return object fetch_assoc()
      */
     function detail($id_user){
-        $mysql = $this->mysql;
+        $mysql = $this->db;
 
         $id = $mysql->real_escape_string($id_user);
         $query = "SELECT nama, email, status FROM user WHERE id_user = '$id'";
@@ -411,7 +421,7 @@ class User{
      * @return MYSQL affected_rows
      */
     function update($profil){
-        $mysql = $this->mysql;
+        $mysql = $this->db;
 
         $id = $mysql->real_escape_string($profil['id']);
         $nama = $mysql->real_escape_string($profil['nama']);
@@ -431,7 +441,7 @@ class User{
      * @return string nama dan total_column
      */
     function tabel(){
-        $mysql = $this->mysql;
+        $mysql = $this->db;
         $count = $this->count();
 
         $query = "SHOW TABLES LIKE 'user'";
@@ -493,7 +503,7 @@ class User{
      * @return string|int total column
      */
     function count(){
-        $mysql = $this->mysql;
+        $mysql = $this->db;
         $search = $this->search;
 
         $query = "SELECT * FROM user $search";
@@ -525,7 +535,7 @@ class User{
     function list(){
         $number = $_GET['limit']??self::LIMIT;
         $page = $this->page;
-        $mysql = $this->mysql;
+        $mysql = $this->db;
         $search = $this->search;
 
         $limit = $number*$page;
@@ -583,7 +593,7 @@ class User{
      * @return MYSQL affected_rows
      */
     function delete($id_user){
-        $mysql = $this->mysql;
+        $mysql = $this->db;
 
         $id = $mysql->real_escape_string($id_user);
 
@@ -720,27 +730,38 @@ class User{
 
 }
 
-class Products{
-    const LIMIT = 12;
+class Products extends Database{
+    const LIMIT = 5;
     const DB = "products";
     public $mysql;
     public $page;
     public $array;
     public $input;
+    public $search;
 
-    function __construct($mysql, $page){
-        $this->mysql=$mysql;
+    /**
+     * Create class form 
+     * 
+     * @param MYSQL $mysql ($mysql adalah koneksi mysql)
+     * @param string|int $page ($page adalah mengatur halaman tabel)
+     * 
+     * @return menampilkan sidebar
+     */
+    function __construct($page){
+        parent::__construct();
         $this->page=$page;
-        //echo "test construct";
 
-        //jika session tersimpan, perintah dibawah akan dijalankan
         login_status();
     }
 
     function __destruct(){
-        //echo "test destruct";
     }
 
+    /**
+     * function new untuk tampilan tombol tambah data
+     * 
+     * @return string button-action
+     */
     function new(){
         return  "<a class='btn btn-primary' href='form.php?page=create&db=products'>
                     <span class='fa-solid fa-plus'></span>    
@@ -748,9 +769,15 @@ class Products{
                 </a>";
     }
 
+    /**
+     * function insert untuk mengirim query data baru
+     * 
+     * @param object $post ($post adalah query dari form input)
+     * 
+     * @return MYSQL affected_rows
+     */
     function insert($post){
-        //memanggil variabel public
-        $mysql = $this->mysql;
+        $mysql = $this->db;
 
         $nama_products = $mysql->real_escape_string($post['nama_products']);
         $harga = $mysql->real_escape_string($post['harga']);
@@ -763,6 +790,11 @@ class Products{
         return $mysql->affected_rows;
     }
 
+    /**
+     * function form untuk tampilan form input
+     * 
+     * @return string form input
+     */
     static function form(){
         return  "  <div class='input-group mb-3'>
                         <label class='input-group-text' for='nama_products'><i class='fa-solid fa-tag'></i></label>
@@ -779,9 +811,16 @@ class Products{
                 ";
     }
 
+    /**
+     * function detail untuk menampilkan kolom berdasarkan id
+     * 
+     * @param string|int $id_products ($id_products adalah query id)
+     * 
+     * @return object fetch_assoc()
+     */
     function detail($id_products){
         //memanggil variabel public
-        $mysql = $this->mysql;
+        $mysql = $this->db;
 
         $id = $mysql->real_escape_string($id_products);
         $query = "SELECT nama_products, harga, total, status, date_c, date_m FROM products WHERE id_products = '$id'";
@@ -789,9 +828,16 @@ class Products{
         return $result;
     }
 
+    /**
+     * function update untuk query memperbarui data
+     * 
+     * @param object $profil ($profil adalah query dari form edit)
+     * 
+     * @return MYSQL affected_rows
+     */
     function update($post){
         //memanggil variabel public
-        $mysql = $this->mysql;
+        $mysql = $this->db;
         
         $id = $mysql->real_escape_string($post['id']);
         $nama_products = $mysql->real_escape_string($post['nama_products']);
@@ -805,9 +851,16 @@ class Products{
     
     }
 
+    /**
+     * function tabel untuk mengecek eksistensi tabel
+     * jika null = create tabel user
+     * 
+     * 
+     * @return string nama dan total_column
+     */
     function tabel(){
         //memanggil variabel public
-        $mysql = $this->mysql;
+        $mysql = $this->db;
         $count = $this->count();
 
         //perintah utk check tabel
@@ -845,16 +898,50 @@ class Products{
         }
     }
 
-    function count(){
-        //memanggil variabel public
-        $mysql = $this->mysql;
+    /**
+     * function limit untuk tampilan drop-down limit column
+     * 
+     * @return string drop-down menu
+     */
+    function limit(){
+        $limit = $_GET['limit']??self::LIMIT;
+        $array = array(5,10,15);
+        $result = "";
 
-        $query = "SELECT * FROM products";
-        $result = $mysql->query($query)->fetch_row();
+        foreach($array as $key){
+            $result .=  "<li><a class='dropdown-item' href='?limit=".$key."'>".$key." / page</a></li>";
+        }
+
+        return  "<div class='dropdown'>
+                    <button class='btn btn-secondary dropdown-toggle mx-2' type='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                        ".$limit." / page
+                    </button>
+                    <ul class='dropdown-menu'>
+                        ".$result."
+                    </ul>
+                </div>";
+    }
+
+    /**
+     * function count untuk menampilkan total column
+     * 
+     * @return string|int total column
+     */
+    function count(){
+        $mysql = $this->db;
+        $search = $this->search;
+
+        $query = "SELECT * FROM products $search";
+        $result = $mysql->query($query)->num_rows;
 
         return $result;
     }
 
+    /**
+     * function header untuk tampilan header tabel
+     * 
+     * @return string header tabel
+     */
     function header(){
         return  "<tr>
                     <th>Nomor</th>
@@ -868,20 +955,49 @@ class Products{
                 </tr>";
     }
 
+    /**
+     * function list untuk mengirim query untuk menampilkan data
+     * 
+     * @return $this->view($result->fetch_all(MYSQLI_ASSOC))
+     */
     function list(){
-        //memanggil variabel public
+        $number = $_GET['limit']??self::LIMIT;
         $page = $this->page;
-        $mysql = $this->mysql;
+        $mysql = $this->db;
+        $search = $this->search;
 
-        $limit = self::LIMIT*$page;
-        $number = self::LIMIT; 
-        $query = "SELECT (@no:=@no+1) AS nomor, id_products, nama_products, harga, total, IF(status = 1, 'aktif', 'tidak aktif') AS status, date_c, date_m FROM products, (SELECT @no:=$limit) AS number ORDER BY id_products LIMIT $limit,$number";
+        $limit = $number*$page;
+        $query =    "SELECT 
+                        (@no:=@no+1) AS nomor, 
+                        products.id_products, 
+                        products.nama_products, 
+                        products.harga, 
+                        products.total, 
+                    IF
+                        (status = 1, 'aktif', 'tidak aktif') AS status, 
+                        products.date_c, 
+                        products.date_m 
+                    FROM 
+                        products, 
+                        (SELECT @no:=$limit) AS number $search
+                    GROUP BY
+                        products.id_products
+                    ORDER BY 
+                        id_products LIMIT $limit,$number";
+                    
         $result = $mysql->query($query);
 
         $this->array = $result->num_rows;
         return $this->view($result->fetch_all(MYSQLI_ASSOC));
     }
 
+    /**
+     * function view untuk mengubah data query menjadi string
+     * 
+     * @param object $array
+     * 
+     * @return string tabel html
+     */ 
     function view($array){
         $list_products = "";
         foreach($array as $key){
@@ -905,9 +1021,15 @@ class Products{
         return $list_products;
     }
 
+    /**
+     * function delete untuk query menghapus data
+     * 
+     * @param string|int $id_user ($id_user adalah query id)
+     * 
+     * @return MYSQL affected_rows
+     */
     function delete($id_products){
-        //memanggil variabel public
-        $mysql = $this->mysql;
+        $mysql = $this->db;
 
         $id = $mysql->real_escape_string($id_products);
 
@@ -916,6 +1038,73 @@ class Products{
         
     }
 
+    /**
+     * function search untuk konfigurasi filter
+     * 
+     * @param string|int $search ($search adalah query search)
+     * 
+     */  
+    function search($search){
+        $this->input = $search;
+        $this->search = "WHERE products.nama_products LIKE '%$search%'";
+    }
+
+    /**
+     * function url untuk mengubah array request method get menjadi string
+     * 
+     * @return string url
+     */
+    function url(){
+        $url = array();
+        $url['db'] = "products";
+        $url['page'] = 0;
+
+        $search = "products.php?".http_build_query($url);
+
+        return $search;
+    }
+
+    /**
+     * function nav untuk menampilkan navigasi button page
+     * 
+     * @return string navigasi button
+     */
+    function nav(){
+        $page = (int) $this->page;
+        $count = (int) $this->count();
+        $array = (int) $this->array;
+        $search = $this->input;
+
+        $limit = $_GET['limit']??self::LIMIT;
+        $range = $count/$limit;
+
+        if($range > round($range)){
+            $range = round($range)+1;
+        }
+
+        $nav = "";
+
+        $nav .= "<a class='btn mx-2 ".($page==0?'btn-primary':'btn-secondary')."' href='user.php?limit=".$limit."&page=0&search=".$search."'> First </a>";
+
+        foreach(range($page-2,$page+2) as $key){
+            if(($key+1) > 0 && $key < $range){
+                $class = $key==$page?"btn-primary":"btn-secondary";
+
+                $nav .= "<a class='btn ".$class." mx-1' href='products.php?limit=".$limit."&page=".$key."&search=".$search."'> ".($key+1)." </a>";
+            }
+        }
+
+        $nav .= "<a class='btn mx-2 ".($page==($range-1)?'btn-primary':'btn-secondary')."' href='products.php?limit=".$limit."&page=".($range-1)."&search=".$search."'> Last </a>";
+
+
+        return $nav;
+    }
+
+    /**
+     * function prev untuk menampilkan navigasi button prev
+     * 
+     * @return string navigasi button prev
+     */
     function prev(){
         //memanggil variabel public
         $page = $this->page;
@@ -942,6 +1131,11 @@ class Products{
         return $prev;
     }
 
+    /**
+     * function next untuk menampilkan navigasi button next
+     * 
+     * @return string navigasi button next
+     */
     function next(){
         //memanggil function dalam class
         $count = $this->count();
@@ -974,27 +1168,43 @@ class Products{
 
 }
 
-class Status{
-    const LIMIT = 12;
+class Status extends Database{
+    const LIMIT = 5;
     const DB = "status";
     public $mysql;
     public $page;
     public $array;
     public $input;
+    public $search;
 
-    function __construct($mysql, $page){
-        $this->mysql=$mysql;
+    /**
+     * Create class form 
+     * 
+     * @param MYSQL $mysql ($mysql adalah koneksi mysql)
+     * @param string|int $page ($page adalah mengatur halaman tabel)
+     * 
+     * @return menampilkan sidebar
+     */
+    function __construct($page){
+        parent::__construct();
         $this->page=$page;
-        //echo "test construct";
 
-        //jika session tersimpan, perintah dibawah akan dijalankan
         login_status();
     }
 
+    /**
+     * function new untuk tampilan tombol tambah data
+     * 
+     * @return string button-action
+     */
     function __destruct(){
-        //echo "test destruct";
     }
 
+    /**
+     * function new untuk tampilan tombol tambah data
+     * 
+     * @return string button-action
+     */
     function new(){
         return  "<a class='btn btn-primary' href='form.php?page=create&db=status'>
                     <span class='fa-solid fa-plus'></span>    
@@ -1002,6 +1212,13 @@ class Status{
                 </a>";
     }
 
+    /**
+     * function json untuk mengambil data dari Tabel status
+     * 
+     * @param object $mysql ($mysql adalah koneksi mysql)
+     * 
+     * @return MYSQL fetch_all(MYSQLI_ASSOC)
+     */
     static function json($mysql){
         $query = "SELECT * FROM status";
         $result = $mysql->query($query)->fetch_all(MYSQLI_ASSOC);
@@ -1009,9 +1226,16 @@ class Status{
         return $result;
     }
 
+    /**
+     * function insert untuk mengirim query data baru
+     * 
+     * @param object $post ($post adalah query dari form input)
+     * 
+     * @return MYSQL affected_rows
+     */
     function insert($post){
         //memanggil variabel public
-        $mysql = $this->mysql;
+        $mysql = $this->db;
 
         $nama = $mysql->real_escape_string($post['title']);
 
@@ -1036,7 +1260,7 @@ class Status{
 
     function detail($id_status){
         //memanggil variabel public
-        $mysql = $this->mysql;
+        $mysql = $this->db;
 
         $id = $mysql->real_escape_string($id_status);
         $query = "SELECT title, level FROM status WHERE id_status = '$id'";
@@ -1046,7 +1270,7 @@ class Status{
 
     function update($profil){
         //memanggil variabel public
-        $mysql = $this->mysql;
+        $mysql = $this->db;
         
         $id = $mysql->real_escape_string($profil['id']);
         $nama = $mysql->real_escape_string($profil['title']);
@@ -1059,7 +1283,7 @@ class Status{
 
     function tabel(){
         //memanggil variabel public
-        $mysql = $this->mysql;
+        $mysql = $this->db;
         $count = $this->count();
 
         //perintah utk check tabel
@@ -1092,9 +1316,33 @@ class Status{
         }
     }
 
+    /**
+     * function limit untuk tampilan drop-down limit column
+     * 
+     * @return string drop-down menu
+     */
+    function limit(){
+        $limit = $_GET['limit']??self::LIMIT;
+        $array = array(5,10,15);
+        $result = "";
+
+        foreach($array as $key){
+            $result .=  "<li><a class='dropdown-item' href='?limit=".$key."'>".$key." / page</a></li>";
+        }
+
+        return  "<div class='dropdown'>
+                    <button class='btn btn-secondary dropdown-toggle mx-2' type='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                        ".$limit." / page
+                    </button>
+                    <ul class='dropdown-menu'>
+                        ".$result."
+                    </ul>
+                </div>";
+    }
+
     function count(){
         //memanggil variabel public
-        $mysql = $this->mysql;
+        $mysql = $this->db;
 
         $query = "SELECT * FROM status";
         $result = $mysql->query($query)->num_rows;
@@ -1111,14 +1359,30 @@ class Status{
                 </tr>";
     }
 
+    /**
+     * function list untuk mengirim query untuk menampilkan data
+     * 
+     * @return $this->view($result->fetch_all(MYSQLI_ASSOC))
+     */
     function list(){
-        //memanggil variabel public
+        $number = $_GET['limit']??self::LIMIT;
         $page = $this->page;
-        $mysql = $this->mysql;
+        $mysql = $this->db;
+        $search = $this->search;
 
-        $limit = self::LIMIT*$page;
-        $number = self::LIMIT;
-        $query = "SELECT (@no:=@no+1) AS nomor, id_status, title, level FROM status, (SELECT @no:=$limit) AS number ORDER BY id_status LIMIT $limit,$number";
+        $limit = $number*$page;
+        $query = "SELECT 
+                    (@no:=@no+1) AS nomor, 
+                    status.id_status, 
+                    status.title, 
+                    status.level 
+                FROM 
+                    status, 
+                    (SELECT @no:=$limit) AS number $search
+                GROUP BY
+                    status.id_status
+                ORDER BY 
+                    status.id_status LIMIT $limit,$number";
         $result = $mysql->query($query);
 
         $this->array = $result->num_rows;
@@ -1145,7 +1409,7 @@ class Status{
 
     function delete($id_status){
         //memanggil variabel public
-        $mysql = $this->mysql;
+        $mysql = $this->db;
 
         $id = $mysql->real_escape_string($id_status);
 
@@ -1158,23 +1422,84 @@ class Status{
         }
     }
 
+    /**
+     * function search untuk konfigurasi filter
+     * 
+     * @param string|int $search ($search adalah query search)
+     * 
+     */  
+    function search($search){
+        $this->input = $search;
+        $this->search = "WHERE status.title LIKE '%$search%'";
+    }
+
+    /**
+     * function url untuk mengubah array request method get menjadi string
+     * 
+     * @return string url
+     */
+    function url(){
+        $url = array();
+        $url['db'] = "user";
+        $url['page'] = 0;
+
+        $search = "status.php?".http_build_query($url);
+
+        return $search;
+    }
+
+    /**
+     * function nav untuk menampilkan navigasi button page
+     * 
+     * @return string navigasi button
+     */
+    function nav(){
+        $page = $this->page;
+        $count = $this->count();
+        $array = $this->array;
+        $search = $this->input;
+
+        $limit = $_GET['limit']??self::LIMIT;
+        $range = $count/$limit;
+
+        if($range > round($range)){
+            $range = round($range)+1;
+        }
+
+        $nav = "";
+
+        $nav .= "<a class='btn mx-2 ".($page==0?'btn-primary':'btn-secondary')."' href='status.php?limit=".$limit."&page=0&search=".$search."'> First </a>";
+
+        foreach(range($page-2,$page+2) as $key){
+            if(($key+1) > 0 && $key < $range){
+                $class = $key==$page?"btn-primary":"btn-secondary";
+
+                $nav .= "<a class='btn ".$class." mx-1' href='status.php?limit=".$limit."&page=".$key."&search=".$search."'> ".($key+1)." </a>";
+            }
+        }
+
+        $nav .= "<a class='btn mx-2 ".($page==($range-1)?'btn-primary':'btn-secondary')."' href='status.php?limit=".$limit."&page=".($range-1)."&search=".$search."'> Last </a>";
+
+
+        return $nav;
+    }
+
     function prev(){
-        //memanggil variabel public
         $page = $this->page;
 
+        $limit = $_GET['limit']??self::LIMIT;
         $prev = "";
         $url = array();
         $url['db'] = "status";
         $url['page'] = $page-1;
+        $url['limit'] = $limit;
 
-        //membuat tombol prev saat mencari berdasarkan karakter
         if($this->input){
             $url['search'] = $this->input;
         }
 
         $search = "?".http_build_query($url);
 
-        //membuat tombol prev
         if(!$page){
             $prev = "<a class='btn btn-primary disabled me-2' href='$search'> <span class='fa-solid fa-chevron-left'></span> </a>";
         }else{
@@ -1185,29 +1510,26 @@ class Status{
     }
 
     function next(){
-        //memanggil function dalam class
         $count = $this->count();
-
-        //memanggil variabel public
         $page = $this->page;
 
+        $limit = $_GET['limit']??self::LIMIT;
         $next = "";
         $url = array();
         $url['db'] = "status";
         $url['page'] = $page+1;
+        $url['limit'] = $limit;
 
-        //membuat tombol next saat mencari berdasarkan karakter
         if($this->input){
             $url['search'] = $this->input;
         }
 
         $search = "?".http_build_query($url);
 
-        //membuat tombol next 
         if($this->array >= self::LIMIT && ($this->array*($page+1))!=$count){
-            $next = "<a class='btn btn-primary' href='$search'> <span class='fa-solid fa-chevron-right'></span> </a>";
+            $next = "<a class='btn btn-primary mx-2' href='$search'> <span class='fa-solid fa-chevron-right'></span> </a>";
         }else{
-            $next = "<a class='btn btn-primary disabled' href='$search'> <span class='fa-solid fa-chevron-right'></span> </a>";
+            $next = "<a class='btn btn-primary mx-2 disabled' href='$search'> <span class='fa-solid fa-chevron-right'></span> </a>";
 
         }
 
@@ -1219,8 +1541,8 @@ class Status{
 /**
 * class form adalah action dari create, delete, dan update
 */ 
-class Form{
-    public $db;
+class Form extends Database{
+    public $tabel;
 
     /**
      * Create class form 
@@ -1229,9 +1551,9 @@ class Form{
      * 
      * @return $this->db = $db
      */
-    function __construct($db){
-        $this->db=$db;
-        //echo "test construct";
+    function __construct($tabel){
+        parent::__construct();
+        $this->tabel=$tabel;
     }
 
     function __destruct(){
@@ -1248,10 +1570,10 @@ class Form{
         login_status();
 
         //memanggil variabel public
-        $db = $this->db;
+        $tabel = $this->tabel;
         $input = "";
 
-        switch($db){
+        switch($tabel){
             case 'user':
                 $input = User::form();
             break;
@@ -1265,13 +1587,13 @@ class Form{
             break;
         }
 
-        return "<main class='col-10 p-3'>
+        return "<main class='col-10 p-3 ms-auto'>
                     <section class='countainer'>
                         <div class='row'>
                             <div class='col-12'>
-                                <form class='card' action='?page=insert&db=".$this->db."' method='POST' >
+                                <form class='card' action='?page=insert&db=".$this->tabel."' method='POST' >
                                     <div class='card-header'>
-                                        <h3>Form Input <span class='text-danger text-uppercase'>".$this->db."</span></h3>
+                                        <h3>Form Input <span class='text-danger text-uppercase'>".$this->tabel."</span></h3>
                                     </div>
                                     <div class='card-body'>
                                         ".$input."
@@ -1297,23 +1619,23 @@ class Form{
      * @return MYSQL AFFECTED ROWS
      * 
      */
-    function insert($mysql,$post){
-        $db = $this->db;
+    function insert($post){
+        $tabel = $this->tabel;
         $query = "";
         $result = "";
-            switch($db){
+            switch($tabel){
                 case "user":
-                    $query = new User($mysql,0);
+                    $query = new User(0);
                     $result = $query->insert($post);
                 break;
 
                 case "status":
-                    $query = new Status($mysql,0);
+                    $query = new Status(0);
                     $result = $query->insert($post);
                 break;
 
                 case "products":
-                    $query = new Products($mysql,0);
+                    $query = new Products(0);
                     $result = $query->insert($post);
                 break;
 
@@ -1323,7 +1645,7 @@ class Form{
 
             if($result){
                 //perintah untuk redirect
-                header("Location: ".$this->db.".php?db=".$this->db);
+                header("Location: ".$this->tabel.".php?db=".$this->tabel);
 
             }else{
                 //notifikasi saat data yg di input sama
@@ -1343,23 +1665,23 @@ class Form{
      * 
      * @return MYSQL AFFECTED ROWS
      */
-    function delete($mysql,$id){
-        $db = $this->db;
+    function delete($id){
+        $tabel = $this->tabel;
         $query = "";
         $result = "";
-        switch($db){
+        switch($tabel){
             case 'user':
-                $query = new User($mysql,0);
+                $query = new User(0);
                 $result = $query->delete($id);
             break;
             
             case "status":
-                $query = new Status($mysql,0);
+                $query = new Status(0);
                 $result = $query->delete($id);
             break;
 
             case "products":
-                $query = new Products($mysql,0);
+                $query = new Products(0);
                 $result = $query->delete($id);
             break;
 
@@ -1384,15 +1706,15 @@ class Form{
      * 
      * @return form edit
      */
-    function edit($mysql,$id){
-        $db = $this->db;
+    function edit($id){
+        $tabel = $this->tabel;
         $query = "";
         $result = "";
-        switch($db){
+        switch($tabel){
             case "user":
-                $query = new User($mysql,0);
+                $query = new User(0);
                 $result = $query->detail($id);
-                $list_status = Status::json($mysql);
+                $list_status = Status::json($this->db);
 
                 if(empty($result)){
                     //notifikasi saat data yg di input kosong
@@ -1407,7 +1729,7 @@ class Form{
             break;
 
             case "status":
-                $query = new Status($mysql,0);
+                $query = new Status(0);
                 $result = $query->detail($id);
 
                 if(empty($result)){
@@ -1422,7 +1744,7 @@ class Form{
             break;
 
             case "products":
-                $query = new Products($mysql,0);
+                $query = new Products(0);
                 $result = $query->detail($id);
 
                 if(empty($result)){

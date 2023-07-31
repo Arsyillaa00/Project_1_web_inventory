@@ -22,7 +22,6 @@
     require_once "../app/router.php"; 
 
     //panggil function mysql 
-    $db = database();
     session_start();
 
     //mengecheck session user
@@ -32,14 +31,25 @@
         $page = $_GET["page"]??0;
 
         //Memanggil class User dr filw controller.php
-        $status = new Status($db,$page);
+        $status = new Status($page);
         $new = $status->new();
         $tabels = $status->tabel();
         $count = $status->count();
         $header = $status->header();
+
+        $text = "";
+        if(isset($_GET['search'])&&$_GET['search']!=NULL){
+            $text = $_GET['search'];
+
+            $status->search($_GET['search']);
+        };
+
+        $url = $status->url();
         $list = $status->list();
         $prev = $status->prev();
         $next = $status->next();
+        $limit = $status->limit();
+        $nav = $status->nav();
 
         //nyambungin file dashboard.php ke file login.php
         include "../template/tabel.php";

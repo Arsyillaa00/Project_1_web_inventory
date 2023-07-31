@@ -20,13 +20,12 @@
   
     require_once "../app/router.php"; 
 
-    $db = database();
     session_start();
 
     if(isset($_SESSION['id_user'])){
         $page = $_GET["page"]??0;
 
-        $user = new User($db,$page);
+        $user = new User($page);
         $new = $user->new();
         $tabels = $user->tabel();
         $count = $user->count();

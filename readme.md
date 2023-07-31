@@ -1,3 +1,93 @@
+### v.1.000.017
+-----
+
+##### NEW
+- class Database
+- class User extends Database
+- class Products extends Database
+- class Status extends Database
+- class Form extends Database
+
+##### class Database
+fungsi untuk memanggil class Database
+```php
+require_once "app/controller.php";
+$database = new Database(); //memanggil new class
+$database->db; //untuk koneksi mysql
+```
+
+##### class Useer
+fungsi untuk memanggil class User
+- $page adalah nama untuk halaman yang akan menampilkan user
+```php
+require_once "app/controller.php";
+$user = new User($page); //memanggil new class
+$new = $user->new(); //tombol untuk menambah data
+$tabels = $user->tabel(); //untuk cek eksistensi tabel user
+$count = $user->count(); //untuk menampilkan jumlah data
+$header = $user->header(); //untuk menampilkan header tabel
+$list = $user->list(); //untuk menampilkan list data dari tabel user
+$prev = $user->prev(); //menampilkan tombol prev
+$next = $user->next(); //menampilkan tombol next
+$user->search($string); //untuk konfigurasi pencarian
+$limit = $user->limit(); //untuk konfigurasi limit row
+$url = $user->url(); //untuk menampilkan url
+$nav = $user->nav(); //untuk menampilkan 5 tombol navigasi
+```
+
+##### class Products
+fungsi untuk memanggil class Products
+- $page adalah nama untuk halaman yang akan menampilkan products
+```php
+require_once "app/controller.php";
+$products = new Products($page); //memanggil new class
+$new = $products->new(); //tombol untuk menambah data 
+$tabels = $products->tabel(); //untuk cek eksistensi tabel products
+$count = $products->count(); //untuk menampilkan jumlah data
+$header = $products->header(); //untuk menampilkan header tabel
+$list = $products->list(); //untuk menampilkan list data dari tabel products
+$prev = $products->prev(); //menampilkan tombol prev
+$next = $products->next(); //menampilkan tombol next
+$products->search($string); //untuk konfigurasi pencarian
+$limit = $products->limit(); //untuk konfigurasi limit row
+$url = $products->url(); //untuk menampilkan url
+$nav = $products->nav(); //untuk menampilkan 5 tombol navigasi
+```
+
+##### class Status
+fungsi untuk memanggil class Status
+- $page adalah nama untuk halaman yang akan menampilkan status
+```php
+require_once "app/controller.php";
+$status = new Status($page); //memanggil new class
+$new = $status->new(); //tombol untuk menambah data
+$tabels = $status->tabel(); //untuk cek eksistensi tabel status
+$count = $status->count(); //untuk menampilkan jumlah data
+$header = $status->header(); //untuk menampilkan header tabel
+$list = $status->list(); //untuk menampilkan list data dari tabel status
+$prev = $status->prev(); //menampilkan tombol prev
+$next = $status->next(); //menampilkan tombol next
+$status->search($string); //untuk konfigurasi pencarian
+$limit = $status->limit(); //untuk konfigurasi limit row
+$url = $status->url(); //untuk menampilkan url
+$nav = $status->nav(); //untuk menampilkan 5 tombol navigasi
+```
+
+##### class Form
+fungsi untuk memanggil class Form
+- $tabel adalah nama tabel
+- $post adalah nama untuk data yang diinputkan
+- $id adalah nama untuk id_user yang berfungsi untuk mencari id dari data yang akan ditampilkan
+```php
+require_once "app/controller.php";
+$form = new Form($tabel); //memanggil new class
+$input = $form->create(); //menampilkan form untuk input data baru
+$form->insert($post); //untuk menambah data baru
+$form->delete($id); //untuk menghapus data
+$form->edit($id); //menampilkan form untuk merubah data
+$result = $query->update($post); //untuk merubah data
+```
+
 ### v.1.000.016
 -----
 

@@ -21,8 +21,7 @@
     //koneksi ke router php
     require_once "../app/router.php"; 
 
-    //panggil function mysql 
-    $db = database();
+    //panggil function mysql
     session_start();
     $page = $_GET["page"]??"";
 
@@ -43,7 +42,7 @@
                     header("Location: ../index.php");
                 }else{
                     $form = new Form($_GET['db']);
-                    $form->insert($db,$post);
+                    $form->insert($post);
                 }
             break;
 
@@ -53,7 +52,7 @@
 
                 if($id){
                     $form = new Form($_GET['db']);
-                    $form->delete($db,$id);  
+                    $form->delete($id);  
                     
                 }else{
                     //notifikasi saat data yg di input sama
@@ -70,7 +69,7 @@
 
                 if($id){
                     $form = new Form($_GET['db']);
-                    $form->edit($db,$id);
+                    $form->edit($id);
                 }else{
                     //notifikasi saat data yg diinput sama
                     print "<script>alert('id user tidak ada!')</script>";
@@ -84,17 +83,17 @@
                 $redirect = $_GET['db'];
                 switch($redirect){
                     case "user":
-                        $query = new User($db,0);
+                        $query = new User(0);
                         $result = $query->update($post);
                     break;
 
                     case "status":
-                        $query = new Status($db,0);
+                        $query = new Status(0);
                         $result = $query->update($post);
                     break;
 
                     case "products":
-                        $query = new Products($db,0);
+                        $query = new Products(0);
                         $result = $query->update($post);
                     break;
                 }

@@ -22,7 +22,6 @@
     require_once "../app/router.php"; 
 
     //panggil function mysql 
-    $db = database();
     session_start();
 
     //mengecheck session user
@@ -32,14 +31,25 @@
         $page = $_GET["page"]??0;
 
         //Memanggil class User dr filw controller.php
-        $products = new Products($db,$page);
+        $products = new Products($page);
         $new = $products->new();
         $tabels = $products->tabel();
         $count = $products->count();
         $header = $products->header();
+
+        $text = "";
+        if(isset($_GET['search'])&&$_GET['search']!=NULL){
+            $text = $_GET['search'];
+
+            $products->search($_GET['search']);
+        };
+
+        $url = $products->url();
         $list = $products->list();
         $prev = $products->prev();
         $next = $products->next();
+        $limit = $products->limit();
+        $nav = $products->nav();
 
         //nyambungin file dashboard.php ke file login.php
         include "../template/tabel.php";

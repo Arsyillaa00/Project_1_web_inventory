@@ -1,8 +1,28 @@
-<main class="col-2">
+<style>
+    .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        }
+
+        .sidebar-sticky {
+            position: relative;
+            top: 0;
+            height: calc(100vh - 150px);
+            padding-top: .5rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+</style>
+
+<main class="col-2 sidebar">
     <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark vh-100">
         <h2>Inventory</h2>
         <hr>
-        <ul class="nav nav-pills flex-column mb-auto">
+        <ul class="nav nav-pills flex-column mb-auto sidebar-sticky">
         <li class="nav-item">
             <a href="dashboard.php" class="nav-link active" aria-current="page">
             <span class="fa-solid fa-house"></span>

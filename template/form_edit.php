@@ -69,7 +69,7 @@
     }
 ?>
 
-<main class="col-10 p-3">
+<main class="col-10 p-3 ms-auto">
     <section class="countainer">
         <div class="row">
             <div class="col-12">
