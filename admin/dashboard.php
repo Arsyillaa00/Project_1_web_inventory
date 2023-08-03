@@ -26,16 +26,15 @@
     //include "../template/login.php";
 
     //panggil function mysql 
-    $db = database();
     session_start();
 
     //mengecheck session user
     if(isset($_SESSION['id_user'])){
 
-        $home = new Home($db);
+        $home = new Home();
         
 
-        print   "<main class='col-10 p-3'>
+        print   "<main class='col-10 p-3 ms-auto'>
                     <section class='countainer'>
                         <div class='row'>
                             ".$home->view()."
@@ -44,10 +43,8 @@
                 </main>";
 
     }else{ 
-        //jika session masih null/kosong, maka akan mengecek tabel user dan menampilkan form login
-        if($db){
-            include "../template/login.php";
-        }
+        include "../template/login.php";
+        
     }
 
 ?>

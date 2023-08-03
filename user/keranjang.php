@@ -84,7 +84,7 @@
         </style>
     </head>
     <body>
-        <header>
+    <header>
             <?php
                 $url = array();
 
@@ -112,47 +112,34 @@
             </nav>
         </header>
 
-        
-
         <!--Menampilkan Product-->
         <section class="container py-4 mt-5">
             <div class="row">
-                <?php
+                <div class="col-12">
+                    <div class="list-group">
+                        <?php
 
-                    //koneksi ke file controller
-                    require_once "../app/controller.php";
-                    if(isset($_SESSION['succes'])){
-                        //echo "<>alert('product berhasil dimasukkan ke keranjang')</>";
-                        print "produk berhasil dimasukkan ke keranjang";
-                        unset($_SESSION['succes']);
-                    }
+                        require_once "../app/controller.php";
 
-                    //mengatur data agar hanya di tampilkan 4 baris
-                    $page = $_GET["page"]??0;  
+                        $keranjang = new Keranjang();
 
-                    //print class Konsumen di file controller.php
-                    $konsumen = new Konsumen($page);
-                    $input = $konsumen->search($_GET['search']??"");
-                    $products = $konsumen->products();
-                    $prev = $konsumen->prev();
-                    $next = $konsumen->next();
-                    echo $input;
-                    echo $products;
+                        if(isset($_GET['add'])){
 
-                    /*
-                    - echo Konsumen::LIMIT; cara memanggil variabel constant dan static di dalam class
-                    - $next = $konsumen->next(); cara memanggil function di dalam class
-                    - $next = $konsumen->page; cara memanggil variabel public di dalam class
-                    */
+                            $array = array(
+                                "id"=>$_GET['add'],
+                                "time"=>time()
+                            );
 
-                ?>
+                            $add = $keranjang->add($array);
+                        };
+
+                        $view = $keranjang->view();
+                        print $view;
+
+                        ?>
+                    </div>
+                </div>
             </div>
         </section>
-        <footer class="container p-3">
-            <?php echo $prev.$next; ?>
-        </footer>
     </body>
 </html>
-
-
-

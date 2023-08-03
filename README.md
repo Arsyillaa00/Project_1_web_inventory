@@ -1,3 +1,18 @@
+### v.1.000.018
+-----
+
+##### NEW
+- class Keranjang
+
+##### class Keranjang
+fungsi untuk memanggil class Keranjang
+- $array adalah object [id, time]
+```php
+require_once "app/controller.php";
+$keranjang = new Keranjang(); //memanggil new class
+$add = $keranjang->add($array); //menambahkan product
+$view = $keranjang->view(); //menampilkan list product di keranjang
+
 ### v.1.000.017
 -----
 
@@ -16,7 +31,7 @@ $database = new Database(); //memanggil new class
 $database->db; //untuk koneksi mysql
 ```
 
-##### class Useer
+##### class User
 fungsi untuk memanggil class User
 - $page adalah nama untuk halaman yang akan menampilkan user
 ```php
